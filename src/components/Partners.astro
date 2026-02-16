@@ -1,0 +1,50 @@
+---
+// Native Astro component translated from React Partners.tsx
+// Uses token-based Tailwind classes from global.css
+const partners = [
+  { name: 'NIBE', logo: 'NIBE' },
+  { name: 'Mitsubishi', logo: 'MITSUBISHI' },
+  { name: 'Daikin', logo: 'DAIKIN' },
+  { name: 'Viessmann', logo: 'VIESSMANN' },
+];
+---
+<section class="bg-background py-16" id="partnerzy">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <p class="uppercase tracking-wider text-sm text-text-inactive mb-4">
+        ZAUFALI NAM
+      </p>
+      <h3 class="text-2xl font-bold text-text-primary">
+        Współpracujemy z wiodącymi producentami
+      </h3>
+    </div>
+
+    <!-- Partners logos -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
+      {partners.map((partner) => (
+        <div class="flex items-center justify-center p-6 bg-background-gray rounded-xl hover:bg-accent transition-colors">
+          <span class="text-xl font-bold text-text-inactive">
+            {partner.logo}
+          </span>
+        </div>
+      ))}
+    </div>
+
+    <!-- Trust badge -->
+    <div class="mt-16 text-center">
+      <div class="inline-flex items-center gap-6 bg-gradient-to-r from-background-gray to-background px-12 py-6 rounded-2xl border-2 border-brand-natural-green">
+        <div class="w-20 h-20 rounded-full flex items-center justify-center bg-brand-forest-green">
+          <span class="text-white text-3xl font-bold">15</span>
+        </div>
+        <div class="text-left">
+          <p class="text-2xl font-bold text-text-primary">
+            Lat doświadczenia
+          </p>
+          <p class="text-text-body">
+            w branży odnawialnych źródeł energii
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

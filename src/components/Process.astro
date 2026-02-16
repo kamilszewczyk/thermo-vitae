@@ -1,0 +1,74 @@
+---
+// Native Astro component converted from React Process.tsx
+// Uses token-based Tailwind classes from global.css; icons inlined as SVG.
+import { Icon } from 'astro-icon/components'
+const steps = [
+  {
+    number: '01',
+    icon: 'lucide:message-circle',
+    title: 'Doradztwo',
+    description:
+      'Bezpłatna konsultacja i analiza potrzeb. Dobieramy optymalne rozwiązanie dla Twojego domu.',
+  },
+  {
+    number: '02',
+    icon: 'lucide:ruler',
+    title: 'Projekt',
+    description:
+      'Kompleksowy projekt instalacji. Uwzględniamy wszystkie parametry techniczne i preferencje klienta.',
+  },
+  {
+    number: '03',
+    icon: 'lucide:wrench',
+    title: 'Montaż',
+    description:
+      'Profesjonalna instalacja przez doświadczonych techników. Krótkі terminy realizacji.',
+  },
+  {
+    number: '04',
+    icon: 'lucide:headphones',
+    title: 'Serwis',
+    description:
+      'Pełne wsparcie po instalacji. Przeglądy, konserwacja i pomoc techniczna przez cały okres użytkowania.',
+  },
+];
+---
+<section class="bg-background py-16 lg:py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Section header -->
+    <div class="text-center mb-16">
+      <p class="uppercase tracking-wider text-sm text-text-inactive mb-4">JAK DZIAŁAMY</p>
+      <h2 class="text-3xl lg:text-4xl font-bold mb-4 text-text-primary">Proces realizacji</h2>
+      <p class="text-lg text-text-body max-w-2xl mx-auto">Od pierwszego kontaktu po kompleksową obsługę posprzedażową</p>
+    </div>
+
+    <!-- Process steps -->
+    <div class="relative">
+      <!-- Connection line - hidden on mobile -->
+      <div class="hidden lg:block absolute top-20 left-0 right-0 h-0.5 bg-accent" style="margin-left:5%; margin-right:5%"></div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+        {steps.map((step) => (
+          <div class="relative">
+            <!-- Step card -->
+            <div class="bg-card rounded-2xl p-8 border-2 border-border hover:border-brand-natural-green transition-colors h-full">
+              <!-- Number badge -->
+              <div class="w-16 h-16 rounded-full flex items-center justify-center mb-6 mx-auto lg:mx-0 bg-brand-forest-green">
+                <span class="text-white text-2xl font-bold">{step.number}</span>
+              </div>
+
+              <!-- Icon -->
+              <div class="mb-4 text-brand-natural-green">
+                <Icon name={step.icon} class="mx-auto lg:mx-0" width="32" height="32" />
+              </div>
+
+              <!-- Content -->
+              <h3 class="text-xl font-bold mb-3 text-center lg:text-left text-text-primary">{step.title}</h3>
+              <p class="text-text-body leading-relaxed text-center lg:text-left">{step.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

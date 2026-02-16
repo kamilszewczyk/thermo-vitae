@@ -1,0 +1,68 @@
+---
+import { Icon } from 'astro-icon/components'
+---
+// Native Astro component version of the React Features.tsx
+// Icons are inlined SVGs to avoid extra deps; styled with token-based classes.
+<section class="py-16 lg:py-24 bg-background-gray">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Section header -->
+    <div class="text-center mb-16">
+      <p class="uppercase tracking-wider text-sm text-text-inactive mb-4">
+        NASZE USŁUGI
+      </p>
+      <h2 class="text-3xl lg:text-4xl font-bold mb-4 text-text-primary">
+        Dlaczego pompy ciepła?
+      </h2>
+      <p class="text-lg text-text-body max-w-2xl mx-auto">
+        Nowoczesne rozwiązania grzewcze, które łączą efektywność, ekologię i oszczędności
+      </p>
+    </div>
+
+    <!-- Features grid -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <!-- Ekologia -->
+      <div class="bg-card rounded-2xl p-8 shadow-sm hover:shadow-xl transition-shadow">
+        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-6 bg-brand-natural-green">
+          <Icon name="lucide:leaf" width="28" height="28" class="text-white" aria-hidden="true" />
+        </div>
+        <h3 class="text-xl font-bold mb-3 text-text-primary">Ekologia</h3>
+        <p class="text-text-body leading-relaxed">
+          Odnawialne źródło energii. Pompy ciepła wykorzystują energię z powietrza, ziemi lub wody, minimalizując wpływ na środowisko.
+        </p>
+      </div>
+
+      <!-- Oszczędność -->
+      <div class="bg-card rounded-2xl p-8 shadow-sm hover:shadow-xl transition-shadow">
+        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-6 bg-brand-natural-green">
+          <Icon name="lucide:coins" width="28" height="28" class="text-white" aria-hidden="true" />
+        </div>
+        <h3 class="text-xl font-bold mb-3 text-text-primary">Oszczędność</h3>
+        <p class="text-text-body leading-relaxed">
+          Nawet 75% niższe koszty ogrzewania w porównaniu do tradycyjnych systemów. Szybki zwrot z inwestycji.
+        </p>
+      </div>
+
+      <!-- Bezobsługowość -->
+      <div class="bg-card rounded-2xl p-8 shadow-sm hover:shadow-xl transition-shadow">
+        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-6 bg-brand-natural-green">
+          <Icon name="lucide:settings" width="28" height="28" class="text-white" aria-hidden="true" />
+        </div>
+        <h3 class="text-xl font-bold mb-3 text-text-primary">Bezobsługowość</h3>
+        <p class="text-text-body leading-relaxed">
+          Nowoczesne pompy ciepła są w pełni zautomatyzowane i nie wymagają ciągłej obsługi czy uzupełniania paliwa.
+        </p>
+      </div>
+
+      <!-- Niezawodność -->
+      <div class="bg-card rounded-2xl p-8 shadow-sm hover:shadow-xl transition-shadow">
+        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-6 bg-brand-natural-green">
+          <Icon name="lucide:award" width="28" height="28" class="text-white" aria-hidden="true" />
+        </div>
+        <h3 class="text-xl font-bold mb-3 text-text-primary">Niezawodność</h3>
+        <p class="text-text-body leading-relaxed">
+          Współpracujemy tylko z najlepszymi producentami. Gwarantujemy długowieczność i stabilną pracę instalacji.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
