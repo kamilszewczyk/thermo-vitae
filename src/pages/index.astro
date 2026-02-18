@@ -7,6 +7,9 @@ import Process from '../components/Process.astro';
 import Portfolio from '../components/Portfolio.astro';
 import Partners from '../components/Partners.astro';
 import Contact from '../components/Contact.astro';
+import { getCollection } from 'astro:content'
+
+const pages = await getCollection('pages')
 ---
 <BaseLayout title="Thermo Vitae">
   <Hero />
@@ -15,4 +18,12 @@ import Contact from '../components/Contact.astro';
   <Portfolio />
   <Partners />
   <Contact />
+
+  <ul>
+    {pages.map(page => (
+        <li>
+          <a href={`/page/${page.slug}`}>{page.data.title}</a>
+        </li>
+    ))}
+  </ul>
 </BaseLayout>
