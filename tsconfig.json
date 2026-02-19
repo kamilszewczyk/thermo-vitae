@@ -8,6 +8,10 @@
     "dist"
   ],
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@assets/*": ["./src/assets/*"],
+    },
     "jsx": "react-jsx",
     "jsxImportSource": "react"
   }

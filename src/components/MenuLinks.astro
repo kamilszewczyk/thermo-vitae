@@ -1,13 +1,16 @@
 ---
-// Reusable menu links component
-// Props:
-// - class: container classes applied to the <nav>
-// - linkClass: classes applied to each <a> link
+import { reader } from "../lib/keystatic";
+
+const navigation = await reader.singletons.navigation.read();
+const links = navigation?.links ?? [];
+
 const { class: className = "", linkClass = "" } = Astro.props;
 ---
+
 <nav class={className}>
-  <a href="#uslugi" class={linkClass}>Usługi</a>
-  <a href="#proces" class={linkClass}>Jak działamy</a>
-  <a href="#realizacje" class={linkClass}>Realizacje</a>
-  <a href="#kontakt" class={linkClass}>Kontakt</a>
+  {links.map((link) => (
+      <a href={link.href} class={linkClass}>
+        {link.label}
+      </a>
+  ))}
 </nav>

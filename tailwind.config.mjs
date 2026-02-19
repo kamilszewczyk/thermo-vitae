@@ -83,7 +83,7 @@ export default {
   // No plugins enabled by default; add common ones if/when needed
   plugins: [
     // require('@tailwindcss/forms'),
-    // require('@tailwindcss/typography'),
+    require('@tailwindcss/typography'),
     // require('@tailwindcss/aspect-ratio'),
   ],
 };

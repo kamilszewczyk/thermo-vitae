@@ -1,0 +1,45 @@
+---
+import Markdoc from "@markdoc/markdoc";
+import { Image } from "astro:assets";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { reader } from "../lib/keystatic";
+import { resolveImage } from "../lib/resolve-image";
+
+export async function getStaticPaths() {
+    const slugs = await reader.collections.posts.list();
+    return slugs.map((slug) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const page = await reader.collections.posts.read(slug!);
+
+if (!page) {
+    return Astro.redirect("/404");
+}
+
+// Render markdoc content to HTML
+const document = await page.content();
+const transformed = Markdoc.transform(document);
+const html = Markdoc.renderers.html(transformed);
+
+// Resolve optimized cover image (if set)
+const coverImage = await resolveImage(page.coverImage);
+---
+
+<BaseLayout title={page.title}>
+	<main class="max-w-3xl mx-auto px-4 py-12">
+        {coverImage && (
+				<Image
+						src={coverImage}
+						alt={page.coverImageAlt || ""}
+						width={1200}
+						class="w-full rounded-lg mb-8"
+				/>
+        )}
+
+		<h1 class="text-4xl font-bold mb-8">{page.title}</h1>
+
+		<!-- Markdoc HTML output — inline images just work -->
+		<div class="prose prose-lg" set:html={html} />
+	</main>
+</BaseLayout>
