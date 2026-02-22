@@ -1,5 +1,6 @@
 // keystatic.config.ts
 import { config, fields, collection, singleton } from '@keystatic/core';
+import { contentComponents } from "./src/lib/content-components";
 
 export default config({
   storage: {
@@ -10,13 +11,13 @@ export default config({
   },
   singletons: {
     navigation: singleton({
-      label: "Navigation",
+      label: "Nawigacja",
       path: "src/content/navigation",
       schema: {
         links: fields.array(
             fields.object({
-              label: fields.text({ label: "Label" }),
-              href: fields.text({ label: "Link (e.g. #uslugi or /about)" }),
+              label: fields.text({ label: "Tytuł" }),
+              href: fields.text({ label: "Url (e.g. #uslugi or /about)" }),
             }),
             {
               label: "Menu Links",
@@ -63,17 +64,6 @@ export default config({
       format: { contentField: "content" },
       schema: {
         title: fields.slug({ name: { label: "Title" } }),
-        // Optimized cover image (optional, for hero/thumbnail use)
-        coverImage: fields.image({
-          label: "Cover Image",
-          description: "Optional hero/cover image for the page",
-          directory: "src/assets/pages",
-          publicPath: "/src/assets/pages/",
-        }),
-        coverImageAlt: fields.text({
-          label: "Cover image alt text",
-          defaultValue: "",
-        }),
         content: fields.markdoc({
           label: "Content",
           options: {
@@ -84,6 +74,7 @@ export default config({
               publicPath: "/images/pages/",
             },
           },
+          components: contentComponents,
         }),
       },
     }),
