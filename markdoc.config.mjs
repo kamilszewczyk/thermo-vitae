@@ -20,5 +20,15 @@ export default defineMarkdocConfig({
                 trustIndicators: { type: Array },
             },
         },
+        Features: {
+            render: component('./src/components/Features.astro'),
+            attributes: {
+                title: { type: String },
+                subtitle: { type: String },
+                description: { type: String },
+                featuresLink: { type: String },
+                features: { type: Array },
+            },
+        },
     },
 });

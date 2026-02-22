@@ -1,66 +1,123 @@
 ---
 import { Icon } from 'astro-icon/components'
+
+export interface FeatureItem {
+  number?: string
+  icon?: string
+  iconBackground?: string
+  iconColor?: string
+  title?: string
+  description?: string
+}
+
+export interface Props {
+  subtitle?: string
+  title?: string
+  description?: string
+  featuresLink?: 'none' | 'line'
+  features?: FeatureItem[]
+}
+
+const block = Astro.props
+
+const subtitle = (block.subtitle || '').trim()
+const title = (block.title || '').trim()
+const description = (block.description || '').trim()
+const features = (block.features ?? []).slice(0, 4)
+const featuresLink = block.featuresLink ?? 'none'
+
+const hasText = Boolean(subtitle || title || description)
+const hasFeatures = features.length > 0
 ---
-<section class="py-16 lg:py-24 bg-background-gray">
+<section class="py-16">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Section header -->
-    <div class="text-center mb-16">
-      <p class="uppercase tracking-wider text-sm text-text-inactive mb-4">
-        NASZE USŁUGI
-      </p>
-      <h2 class="text-3xl lg:text-4xl font-bold mb-4 text-text-primary">
-        Dlaczego pompy ciepła?
-      </h2>
-      <p class="text-lg text-text-body max-w-2xl mx-auto">
-        Nowoczesne rozwiązania grzewcze, które łączą efektywność, ekologię i oszczędności
-      </p>
-    </div>
-
-    <!-- Features grid -->
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-      <!-- Ekologia -->
-      <div class="bg-card rounded-2xl p-8 shadow-sm hover:shadow-xl transition-shadow">
-        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-6 bg-brand-natural-green">
-          <Icon name="lucide:leaf" width="28" height="28" class="text-white" aria-hidden="true" />
-        </div>
-        <h3 class="text-xl font-bold mb-3 text-text-primary">Ekologia</h3>
-        <p class="text-text-body leading-relaxed">
-          Odnawialne źródło energii. Pompy ciepła wykorzystują energię z powietrza, ziemi lub wody, minimalizując wpływ na środowisko.
-        </p>
+    {hasText && (
+      <div class="text-center mb-16">
+        {subtitle && (
+          <p class="uppercase tracking-wider text-sm text-text-inactive mb-4">
+            {subtitle}
+          </p>
+        )}
+        {title && (
+          <h2 class="text-3xl lg:text-4xl font-bold mb-4 text-text-primary">
+            {title}
+          </h2>
+        )}
+        {description && (
+          <p class="text-lg text-text-body max-w-2xl mx-auto">
+            {description}
+          </p>
+        )}
       </div>
+    )}
 
-      <!-- Oszczędność -->
-      <div class="bg-card rounded-2xl p-8 shadow-sm hover:shadow-xl transition-shadow">
-        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-6 bg-brand-natural-green">
-          <Icon name="lucide:coins" width="28" height="28" class="text-white" aria-hidden="true" />
-        </div>
-        <h3 class="text-xl font-bold mb-3 text-text-primary">Oszczędność</h3>
-        <p class="text-text-body leading-relaxed">
-          Nawet 75% niższe koszty ogrzewania w porównaniu do tradycyjnych systemów. Szybki zwrot z inwestycji.
-        </p>
-      </div>
+    {hasFeatures && (
+      <div class="relative">
+        {featuresLink === 'line' && (
+          <div
+            class="hidden lg:block absolute top-20 left-0 right-0 h-0.5 bg-accent"
+            style="margin-left:5%; margin-right:5%"
+          ></div>
+        )}
 
-      <!-- Bezobsługowość -->
-      <div class="bg-card rounded-2xl p-8 shadow-sm hover:shadow-xl transition-shadow">
-        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-6 bg-brand-natural-green">
-          <Icon name="lucide:settings" width="28" height="28" class="text-white" aria-hidden="true" />
-        </div>
-        <h3 class="text-xl font-bold mb-3 text-text-primary">Bezobsługowość</h3>
-        <p class="text-text-body leading-relaxed">
-          Nowoczesne pompy ciepła są w pełni zautomatyzowane i nie wymagają ciągłej obsługi czy uzupełniania paliwa.
-        </p>
-      </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+          {features.map((feature) => {
+            const number = (feature.number || '').trim()
+            const icon = (feature.icon || '').trim()
+            const iconBackground =
+              (feature.iconBackground || '').trim() || 'bg-brand-natural-green'
+            const iconColor = (feature.iconColor || '').trim() || 'text-white'
+            const itemTitle = (feature.title || '').trim()
+            const itemDescription = (feature.description || '').trim()
 
-      <!-- Niezawodność -->
-      <div class="bg-card rounded-2xl p-8 shadow-sm hover:shadow-xl transition-shadow">
-        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-6 bg-brand-natural-green">
-          <Icon name="lucide:award" width="28" height="28" class="text-white" aria-hidden="true" />
+            return (
+              <div class="relative">
+                <div class="bg-card rounded-2xl p-8 border-2 border-border hover:border-brand-natural-green transition-colors h-full">
+                  <div class="flex flex-col items-center lg:items-start text-center lg:text-left h-full">
+                    {(number || icon) && (
+                      <div class="flex items-center justify-center lg:justify-start gap-4 mb-6">
+                        {number && (
+                          <div class="w-16 h-16 rounded-full flex items-center justify-center bg-brand-forest-green">
+                            <span class="text-white text-2xl font-bold">{number}</span>
+                          </div>
+                        )}
+
+                        {icon && (
+                          <div
+                            class:list={[
+                              'w-14 h-14 rounded-xl flex items-center justify-center',
+                              iconBackground,
+                            ]}
+                          >
+                            <Icon
+                              name={icon}
+                              width="28"
+                              height="28"
+                              class:list={['text-white', iconColor]}
+                              aria-hidden="true"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {itemTitle && (
+                      <h3 class="text-xl font-bold mb-3 text-text-primary">
+                        {itemTitle}
+                      </h3>
+                    )}
+                    {itemDescription && (
+                      <p class="text-text-body leading-relaxed">
+                        {itemDescription}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )
+          })}
         </div>
-        <h3 class="text-xl font-bold mb-3 text-text-primary">Niezawodność</h3>
-        <p class="text-text-body leading-relaxed">
-          Współpracujemy tylko z najlepszymi producentami. Gwarantujemy długowieczność i stabilną pracę instalacji.
-        </p>
       </div>
-    </div>
+    )}
   </div>
 </section>

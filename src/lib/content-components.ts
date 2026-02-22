@@ -108,4 +108,53 @@ export const contentComponents = {
             }),
         },
     }),
+    // --- Features (unified) ---
+    Features: block({
+        label: "Features",
+        schema: {
+            subtitle: fields.text({
+                label: "Subtitle (above title)",
+                validation: { length: { min: 0, max: 80 } },
+            }),
+            title: fields.text({
+                label: "Title (H2)",
+                validation: { length: { min: 0, max: 120 } },
+            }),
+            description: fields.text({
+                label: "Description",
+                multiline: true,
+                validation: { length: { min: 0, max: 300 } },
+            }),
+            featuresLink: fields.select({
+                label: "Features link",
+                options: [
+                    { label: "None", value: "none" },
+                    { label: "Line", value: "line" },
+                ],
+                defaultValue: "none",
+            }),
+            features: fields.array(
+                fields.object({
+                    number: fields.text({ label: "Number" }),
+                    icon: fields.text({ label: "Icon (lucide:...)" }),
+                    iconBackground: fields.text({
+                        label: "Icon background class (e.g. bg-brand-natural-green)",
+                    }),
+                    iconColor: fields.text({
+                        label: "Icon color class (e.g. text-white)",
+                    }),
+                    title: fields.text({ label: "Title" }),
+                    description: fields.text({
+                        label: "Description",
+                        multiline: true,
+                    }),
+                }),
+                {
+                    label: "Features (max 4)",
+                    itemLabel: (item) => item.fields.title.value || "Feature",
+                    validation: { length: { max: 4 } },
+                }
+            ),
+        },
+    }),
 };
