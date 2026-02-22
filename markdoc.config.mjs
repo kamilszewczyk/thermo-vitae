@@ -30,5 +30,17 @@ export default defineMarkdocConfig({
                 features: { type: Array },
             },
         },
+        Badge: {
+            render: component('./src/components/Badge.astro'),
+            attributes: {
+                number: {type: String},
+                icon: {type: String},
+                title: {type: String},
+                description: {type: String},
+            },
+        },
+        Partners: {
+            render: component('./src/components/Partners.astro'),
+        }
     },
 });

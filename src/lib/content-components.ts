@@ -157,4 +157,23 @@ export const contentComponents = {
             ),
         },
     }),
+    // --- Badge ---
+    Badge: block({
+        label: "Badge",
+        schema: {
+            number: fields.text({ label: "Number" }),
+            icon: fields.text({ label: "Icon (lucide:...)" }),
+            title: fields.text({ label: "Title" }),
+            description: fields.text({
+                label: "Description"
+            }),
+        },
+    }),
+
+    Partners: block({
+        label: "Partners",
+        schema: {
+
+        }
+    }),
 };

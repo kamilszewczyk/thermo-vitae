@@ -1,0 +1,47 @@
+---
+import { Icon } from "astro-icon/components";
+
+export interface Props {
+  number?: string;
+  icon?: string;
+  iconColor?: string;
+  title?: string;
+  description?: string;
+}
+
+const block = Astro.props;
+
+const number = (block.number || "").trim();
+const icon = (block.icon || "").trim();
+const title = (block.title || "").trim();
+const description = (block.description || "").trim();
+
+const hasBadge = Boolean(number || icon || title || description);
+---
+
+{hasBadge && (
+<section class="flex justify-center">
+  <div class="inline-flex items-center gap-6 bg-gradient-to-r from-background-gray to-background px-12 py-6 rounded-2xl border-2 border-brand-natural-green">
+    <div class="w-20 h-20 rounded-full flex items-center justify-center bg-brand-forest-green">
+      <div class="flex items-center gap-3">
+        {number && (
+          <span class="text-white text-3xl font-bold">{number}</span>
+        )}
+        {icon && (
+          <Icon
+            name={icon}
+            width="24"
+            height="24"
+            class="text-white"
+            aria-hidden="true"
+          />
+        )}
+      </div>
+    </div>
+    <div class="text-left">
+      {title && <p class="text-2xl font-bold text-text-primary">{title}</p>}
+      {description && <p class="text-text-body">{description}</p>}
+    </div>
+  </div>
+</section>
+)}
