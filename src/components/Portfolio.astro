@@ -1,37 +1,26 @@
 ---
-import Icon from 'astro-icon';
-const projects = [
-  {
-    id: 1,
-    title: 'Dom jednorodzinny - Warszawa',
-    location: 'Warszawa, Wilanów',
-    system: 'Pompa ciepła powietrze-woda 12kW',
-    image: 'https://images.unsplash.com/photo-1661526351071-0c2b939b695f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBoZWF0JTIwcHVtcCUyMG91dGRvb3IlMjBpbnN0YWxsYXRpb258ZW58MXx8fHwxNzY5OTM4ODQ3fDA&ixlib=rb-4.1.0&q=80&w=1080',
-  },
-  {
-    id: 2,
-    title: 'Willa z basenem',
-    location: 'Konstancin-Jeziorna',
-    system: 'Pompa ciepła gruntowa 18kW',
-    image: 'https://images.unsplash.com/photo-1760886810583-dbb87686d08c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoZWF0JTIwcHVtcCUyMHRlY2huaWNhbCUyMGluc3RhbGxhdGlvbiUyMGhvdXNlfGVufDF8fHx8MTc2OTkzODg0OHww&ixlib=rb-4.1.0&q=80&w=1080',
-  },
-  {
-    id: 3,
-    title: 'Rezydencja',
-    location: 'Podkowa Leśna',
-    system: 'Hybrydowy system grzewczy 16kW',
-    image: 'https://images.unsplash.com/photo-1578850263823-9417840cf1df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBob3VzZSUyMGhlYXRpbmclMjBzeXN0ZW18ZW58MXx8fHwxNzY5OTM4ODQ4fDA&ixlib=rb-4.1.0&q=80&w=1080',
-  },
-  {
-    id: 4,
-    title: 'Dom pasywny',
-    location: 'Piaseczno',
-    system: 'Pompa ciepła powietrze-woda 8kW',
-    image: 'https://images.unsplash.com/photo-1719050817004-c76eb7c75c99?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBodmFjJTIwdGVjaG5pY2lhbiUyMGluc3RhbGxhdGlvbnxlbnwxfHx8fDE3Njk5Mzg4NDl8MA&ixlib=rb-4.1.0&q=80&w=1080',
-  },
-];
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import { resolveImage } from '../lib/resolve-image';
+
+const realizacje = await getCollection('realizacje');
+
+const projects = await Promise.all(
+  [...realizacje]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 4)
+    .map(async (item) => ({
+      slug: item.data.slug,
+      title: item.data.title,
+      location: item.data.location,
+      shortDescription: item.data.short_description,
+      imagePath: item.data.image,
+      imageMeta: await resolveImage(item.data.image),
+      status: item.data.status,
+    }))
+);
 ---
-<section class="py-16 lg:py-24 bg-background-gray" id="realizacje">
+<section class="py-16 lg:py-24" id="realizacje">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Section header -->
     <div class="text-center mb-16">
@@ -49,17 +38,31 @@ const projects = [
     <!-- Projects grid -->
     <div class="grid md:grid-cols-2 gap-6">
       {projects.map((project) => (
-        <div class="group relative bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all cursor-pointer">
+        <a
+          href={`/realizacje/${project.slug}`}
+          class="group relative bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all cursor-pointer"
+        >
           <!-- Image -->
           <div class="relative h-80 overflow-hidden">
-            <img
-              src={project.image}
-              alt={project.title}
-              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              loading="lazy"
-              decoding="async"
-              fetchpriority="low"
-            />
+            {project.imageMeta ? (
+              <Image
+                src={project.imageMeta}
+                alt={project.title}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                widths={[640, 960, 1080]}
+                sizes="(min-width: 768px) 50vw, 100vw"
+                loading="lazy"
+              />
+            ) : (
+              <img
+                src={project.imagePath}
+                alt={project.title}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+                decoding="async"
+                fetchpriority="low"
+              />
+            )}
             <!-- Overlay on hover -->
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </div>
@@ -70,27 +73,27 @@ const projects = [
               {project.title}
             </h3>
             <p class="text-text-inactive text-sm mb-2">{project.location}</p>
-            <p class="text-text-body">{project.system}</p>
+            <p class="text-text-body">{project.shortDescription}</p>
           </div>
 
           <!-- Badge -->
           <div class="absolute top-4 right-4 bg-card px-3 py-1 rounded-full shadow-lg">
             <span class="text-xs font-semibold text-brand-forest-green">
-              Zrealizowano
+              {project.status}
             </span>
           </div>
-        </div>
+        </a>
       ))}
     </div>
 
     <!-- CTA -->
     <div class="text-center mt-12">
-      <button
-        class="px-8 py-4 rounded-lg font-semibold text-white bg-brand-forest-green transition-all hover:shadow-lg"
-        type="button"
+      <a
+        href="/realizacje"
+        class="inline-block px-8 py-4 rounded-lg font-semibold text-white bg-brand-forest-green transition-all hover:shadow-lg"
       >
         Zobacz wszystkie realizacje
-      </button>
+      </a>
     </div>
   </div>
 </section>

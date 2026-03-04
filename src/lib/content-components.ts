@@ -1,9 +1,5 @@
 import { fields } from "@keystatic/core";
-import {
-    wrapper,
-    block,
-    repeating,
-} from "@keystatic/core/content-components";
+import { block } from "@keystatic/core/content-components";
 
 const badgePositionOptions = [
     { label: "Top left", value: "top-left" },
@@ -173,7 +169,34 @@ export const contentComponents = {
     Partners: block({
         label: "Partners",
         schema: {
-
+            subtitle: fields.text({
+                label: "Subtitle (above title)",
+                validation: { length: { min: 0, max: 80 } },
+            }),
+            title: fields.text({
+                label: "Title (H3)",
+                validation: { length: { min: 0, max: 120 } },
+            }),
+            partners: fields.array(
+                fields.object({
+                    name: fields.text({ label: "Partner name" }),
+                    image: fields.image({
+                        label: "Partner logo",
+                        directory: "src/assets/partners",
+                        publicPath: "/src/assets/partners/",
+                    }),
+                }),
+                {
+                    label: "Partners (max 8)",
+                    itemLabel: (item) => item.fields.name.value || "Partner",
+                    validation: { length: { max: 8 } },
+                }
+            ),
         }
+    }),
+
+    Portfolio: block({
+        label: "Portfolio",
+        schema: {},
     }),
 };

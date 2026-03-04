@@ -41,6 +41,15 @@ export default defineMarkdocConfig({
         },
         Partners: {
             render: component('./src/components/Partners.astro'),
+            attributes: {
+                title: { type: String },
+                subtitle: { type: String },
+                partners: { type: Array },
+            },
+        },
+        Portfolio: {
+            render: component('./src/components/Portfolio.astro'),
+            attributes: {},
         }
     },
 });

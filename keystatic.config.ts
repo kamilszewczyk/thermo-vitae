@@ -78,5 +78,63 @@ export default config({
         }),
       },
     }),
+    realizacje: collection({
+      label: "Realizacje",
+      slugField: "slug",
+      path: "src/content/realizacje/*",
+      format: { data: "yaml" },
+      schema: {
+        slug: fields.slug({
+          name: { label: "Slug" },
+        }),
+        title: fields.text({ label: "Title" }),
+        short_description: fields.text({
+          label: "Short description",
+          multiline: true,
+        }),
+        description: fields.text({
+          label: "Description",
+          multiline: true,
+        }),
+        image: fields.image({
+          label: "Main image",
+          directory: "src/assets/pages/realizacje",
+          publicPath: "/src/assets/pages/realizacje/",
+        }),
+        gallery: fields.array(
+          fields.image({
+            label: "Gallery image",
+            directory: "src/assets/pages/realizacje",
+            publicPath: "/src/assets/pages/realizacje/",
+          }),
+          {
+            label: "Gallery",
+            itemLabel: () => "Image",
+          }
+        ),
+        location: fields.text({ label: "Location" }),
+        gps_location: fields.text({ label: "GPS location" }),
+        status: fields.select({
+          label: "Status",
+          options: [
+            { label: "W trakcie", value: "W trakcie" },
+            { label: "Zrealizowano", value: "Zrealizowano" },
+          ],
+          defaultValue: "Zrealizowano",
+        }),
+        category: fields.select({
+          label: "Category",
+          options: [
+            { label: "Pompy ciepła", value: "Pompy ciepła" },
+            { label: "Fotowoltaika", value: "Fotowoltaika" },
+            { label: "Chłodzenie", value: "Chłodzenie" },
+            { label: "Rekuperacja", value: "Rekuperacja" },
+            { label: "Instalacje wewnętrzne", value: "Instalacje wewnętrzne" },
+            { label: "Inne", value: "Inne" },
+          ],
+          defaultValue: "Pompy ciepła",
+        }),
+      },
+    }),
   },
 });

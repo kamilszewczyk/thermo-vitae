@@ -1,22 +1,13 @@
 ---
 import { getEntry, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Features from '../components/Features.astro';
-import Process from '../components/Process.astro';
-import Portfolio from '../components/Portfolio.astro';
 import Contact from '../components/Contact.astro';
-import { getCollection } from 'astro:content'
 
-// Fetch the specific 'home' page data from Keystatic/Content Layer
 const homePage = await getEntry('pages', 'home');
-
-// If the home page entry exists, prepare its content
 const rendered = homePage ? await render(homePage) : null;
 const Content = rendered?.Content;
 ---
 <BaseLayout title="Thermo Vitae">
-  <!-- Render the Keystatic content dynamically here -->
   {Content && (<Content />)}
-  <Portfolio />
   <Contact />
 </BaseLayout>

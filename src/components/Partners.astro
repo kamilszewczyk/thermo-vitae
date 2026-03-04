@@ -1,33 +1,70 @@
 ---
-// Native Astro component translated from React Partners.tsx
-// Uses token-based Tailwind classes from global.css
-import Badge from "./Badge.astro";
+import { Image } from "astro:assets";
+import { resolveImage } from "../lib/resolve-image";
 
-const partners = [
-  { name: 'NIBE', logo: 'NIBE' },
-  { name: 'Mitsubishi', logo: 'MITSUBISHI' },
-  { name: 'Daikin', logo: 'DAIKIN' },
-  { name: 'Viessmann', logo: 'VIESSMANN' },
-];
+type PartnerItem = {
+  name?: string;
+  image?: string | null;
+};
+
+export interface Props {
+  title?: string;
+  subtitle?: string;
+  partners?: PartnerItem[];
+}
+
+const block = Astro.props;
+
+const subtitle = (block.subtitle || "ZAUFALI NAM").trim();
+const title = (block.title || "Wspolpracujemy z wiodacymi producentami").trim();
+
+const partnersInput = Array.isArray(block.partners) ? block.partners.slice(0, 8) : [];
+
+const partners = await Promise.all(
+    partnersInput.map(async (item) => {
+    const name = (item?.name || "").trim();
+    const imagePath = typeof item?.image === "string" ? item.image : null;
+    const imageMeta = await resolveImage(imagePath);
+
+    if (!name && !imageMeta) return null;
+    return { name, imageMeta };
+  })
+);
+
+const partnerItems = partners.filter(Boolean);
 ---
 <section class="bg-background py-16" id="partnerzy">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12">
-      <p class="uppercase tracking-wider text-sm text-text-inactive mb-4">
-        ZAUFALI NAM
-      </p>
-      <h3 class="text-2xl font-bold text-text-primary">
-        Współpracujemy z wiodącymi producentami
-      </h3>
+      {subtitle && (
+        <p class="uppercase tracking-wider text-sm text-text-inactive mb-4">
+          {subtitle}
+        </p>
+      )}
+      {title && (
+        <h3 class="text-2xl font-bold text-text-primary">
+          {title}
+        </h3>
+      )}
     </div>
 
-    <!-- Partners logos -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
-      {partners.map((partner) => (
-        <div class="flex items-center justify-center p-6 bg-background-gray rounded-xl hover:bg-accent transition-colors">
-          <span class="text-xl font-bold text-text-inactive">
-            {partner.logo}
-          </span>
+      {partnerItems.map((partner) => (
+        <div class="flex items-center justify-center p-6 bg-background-gray rounded-xl hover:bg-accent transition-colors min-h-24">
+          {partner?.imageMeta ? (
+            <Image
+              src={partner.imageMeta}
+              alt={`${partner.name || "Partner"} logo`}
+              class="max-h-10 w-auto object-contain"
+              widths={[160, 240, 320]}
+              sizes="(min-width: 768px) 18vw, 35vw"
+              loading="lazy"
+            />
+          ) : (
+            <span class="text-xl font-bold text-text-inactive">
+              {partner?.name}
+            </span>
+          )}
         </div>
       ))}
     </div>

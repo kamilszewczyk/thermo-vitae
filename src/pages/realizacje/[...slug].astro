@@ -1,0 +1,96 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { resolveImage } from '../../lib/resolve-image';
+
+export async function getStaticPaths() {
+  const realizacje = await getCollection('realizacje');
+
+  return Promise.all(
+    realizacje.map(async (entry) => ({
+      params: { slug: entry.data.slug },
+      props: {
+        entry,
+        mainImageMeta: await resolveImage(entry.data.image),
+        galleryItems: await Promise.all(
+          entry.data.gallery.map(async (image) => ({
+            image,
+            imageMeta: await resolveImage(image),
+          }))
+        ),
+      },
+    }))
+  );
+}
+
+const { entry, mainImageMeta, galleryItems } = Astro.props;
+const { data } = entry;
+---
+
+<BaseLayout title={`${data.title} | Realizacje`}>
+  <section class="py-16 lg:py-24 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a href="/realizacje" class="inline-block text-brand-forest-green mb-8">← Powrot do realizacji</a>
+
+      {mainImageMeta ? (
+        <Image
+          src={mainImageMeta}
+          alt={data.title}
+          class="w-full h-[420px] object-cover rounded-2xl mb-8"
+          widths={[768, 1080, 1400]}
+          sizes="(min-width: 1024px) 896px, 100vw"
+          loading="eager"
+        />
+      ) : (
+        <img
+          src={data.image}
+          alt={data.title}
+          class="w-full h-[420px] object-cover rounded-2xl mb-8"
+          loading="eager"
+        />
+      )}
+
+      <h1 class="text-3xl lg:text-4xl font-bold text-text-primary mb-4">{data.title}</h1>
+      <p class="text-lg text-text-body mb-6">{data.short_description}</p>
+
+      <div class="grid sm:grid-cols-2 gap-4 mb-10 text-sm">
+        <p><strong>Status:</strong> {data.status}</p>
+        <p><strong>Kategoria:</strong> {data.category}</p>
+        <p><strong>Lokalizacja:</strong> {data.location}</p>
+        <p><strong>GPS:</strong> {data.gps_location}</p>
+      </div>
+
+      <p class="text-text-body mb-10 whitespace-pre-line">{data.description}</p>
+
+      {galleryItems.length > 0 && (
+        <div>
+          <h2 class="text-2xl font-bold text-text-primary mb-4">Galeria</h2>
+          <div class="grid sm:grid-cols-2 gap-4">
+            {galleryItems.map((item, index) => (
+              item.imageMeta ? (
+                <Image
+                  src={item.imageMeta}
+                  alt={`${data.title} - galeria ${index + 1}`}
+                  class="w-full h-60 object-cover rounded-xl"
+                  widths={[480, 720, 960]}
+                  sizes="(min-width: 640px) 50vw, 100vw"
+                  loading="lazy"
+                />
+              ) : (
+                <img
+                  src={item.image}
+                  alt={`${data.title} - galeria ${index + 1}`}
+                  class="w-full h-60 object-cover rounded-xl"
+                  loading="lazy"
+                  decoding="async"
+                />
+              )
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
