@@ -1,6 +1,13 @@
 links:
   - label: Usługi
     href: /uslugi
+    children:
+      - label: Pompy ciepła
+        href: /uslugi/pompy-ciepla
+      - label: Fotowoltaika
+        href: /uslugi/fotowoltaika
+      - label: Rekuperacja
+        href: /uslugi/rekuperacja
   - label: Jak działamy
     href: /proces
   - label: Realizacje

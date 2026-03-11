@@ -1,16 +1,149 @@
 ---
+import { Icon } from "astro-icon/components";
 import { reader } from "../lib/keystatic";
 
 const navigation = await reader.singletons.navigation.read();
 const links = navigation?.links ?? [];
 
 const { class: className = "", linkClass = "" } = Astro.props;
+
+const topLevelTextClass = "text-black md:text-inherit";
+const dropdownSummaryClass = "menu-trigger list-none cursor-pointer flex items-center gap-1 [&::-webkit-details-marker]:hidden";
+const dropdownIconClass = "menu-icon shrink-0 transition-transform duration-200 group-open/menu:rotate-180";
+
+const dropdownPanelBaseClass = "menu-panel mt-2 md:mt-3 md:absolute md:left-0 md:top-full md:min-w-52 rounded-none md:rounded-md border-0 md:border md:border-border bg-transparent md:bg-background shadow-none md:shadow-sm overflow-hidden z-10";
+const dropdownPanelDesktopHiddenClass = "md:opacity-0 md:invisible md:translate-y-1 md:pointer-events-none md:transition-all md:duration-150";
+const dropdownPanelDesktopHoverClass = "md:group-hover/menu:opacity-100 md:group-hover/menu:visible md:group-hover/menu:translate-y-0 md:group-hover/menu:pointer-events-auto";
+const dropdownPanelDesktopOpenClass = "md:group-open/menu:opacity-100 md:group-open/menu:visible md:group-open/menu:translate-y-0 md:group-open/menu:pointer-events-auto";
+const dropdownPanelDesktopFocusClass = "md:group-focus-within/menu:opacity-100 md:group-focus-within/menu:visible md:group-focus-within/menu:translate-y-0 md:group-focus-within/menu:pointer-events-auto";
+const dropdownPanelClass = [
+  dropdownPanelBaseClass,
+  dropdownPanelDesktopHiddenClass,
+  dropdownPanelDesktopHoverClass,
+  dropdownPanelDesktopOpenClass,
+  dropdownPanelDesktopFocusClass,
+].join(" ");
+
+const dropdownChildItemClass = "block ml-4 md:ml-0 px-3 py-2 text-sm text-text-body hover:text-brand-forest-green hover:bg-accent transition-colors";
 ---
 
-<nav class={className}>
-  {links.map((link) => (
-      <a href={link.href} class={linkClass}>
-        {link.label}
-      </a>
-  ))}
+<nav class={className} data-menu-links>
+  {links.map((link) => {
+    const children = link.children ?? [];
+
+    if (children.length === 0) {
+      return (
+        <a href={link.href} class:list={[linkClass, topLevelTextClass]}>
+          {link.label}
+        </a>
+      );
+    }
+
+    return (
+      <details class="menu-dropdown group/menu relative">
+        <summary class:list={[linkClass, topLevelTextClass, dropdownSummaryClass]}>
+          <span>{link.label}</span>
+          <Icon
+            name="lucide:chevron-down"
+            width="16"
+            height="16"
+            aria-hidden="true"
+            class={dropdownIconClass}
+          />
+        </summary>
+
+        <div class={dropdownPanelClass}>
+          {link.href ? (
+            <a href={link.href} class={dropdownChildItemClass}>
+              {link.label}
+            </a>
+          ) : null}
+
+          {children.map((child) => (
+            <a href={child.href} class={dropdownChildItemClass}>
+              {child.label}
+            </a>
+          ))}
+        </div>
+      </details>
+    );
+  })}
 </nav>
+
+<script is:inline>
+  for (const nav of document.querySelectorAll('nav[data-menu-links]')) {
+    const dropdowns = Array.from(nav.querySelectorAll('details.menu-dropdown'));
+    const desktopMedia = window.matchMedia('(min-width: 768px)');
+    const leaveDelayMs = 150;
+    const closeTimers = new Map();
+
+    const clearCloseTimer = (dropdown) => {
+      const timerId = closeTimers.get(dropdown);
+      if (timerId) {
+        window.clearTimeout(timerId);
+        closeTimers.delete(dropdown);
+      }
+    };
+
+    const closeNow = (dropdown) => {
+      clearCloseTimer(dropdown);
+      dropdown.open = false;
+    };
+
+    const scheduleClose = (dropdown) => {
+      clearCloseTimer(dropdown);
+      const timerId = window.setTimeout(() => {
+        dropdown.open = false;
+        closeTimers.delete(dropdown);
+      }, leaveDelayMs);
+      closeTimers.set(dropdown, timerId);
+    };
+
+    const closeAll = () => {
+      for (const dropdown of dropdowns) {
+        closeNow(dropdown);
+      }
+    };
+
+    const closeOthers = (currentDropdown) => {
+      for (const dropdown of dropdowns) {
+        if (dropdown !== currentDropdown) {
+          closeNow(dropdown);
+        }
+      }
+    };
+
+    for (const dropdown of dropdowns) {
+      dropdown.addEventListener('toggle', () => {
+        if (dropdown.open) {
+          closeOthers(dropdown);
+        }
+      });
+
+      dropdown.addEventListener('mouseenter', () => {
+        clearCloseTimer(dropdown);
+        if (!desktopMedia.matches) return;
+        dropdown.open = true;
+        closeOthers(dropdown);
+      });
+
+      dropdown.addEventListener('mouseleave', () => {
+        if (!desktopMedia.matches) return;
+        scheduleClose(dropdown);
+      });
+    }
+
+    nav.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeAll();
+      }
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!(event.target instanceof Node)) return;
+      if (!nav.contains(event.target)) {
+        closeAll();
+      }
+    });
+  }
+</script>

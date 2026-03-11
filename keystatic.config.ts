@@ -17,7 +17,19 @@ export default config({
         links: fields.array(
             fields.object({
               label: fields.text({ label: "Tytuł" }),
-              href: fields.text({ label: "Url (e.g. #uslugi or /about)" }),
+              href: fields.text({
+                label: "Url (optional for dropdown parent)",
+              }),
+              children: fields.array(
+                fields.object({
+                  label: fields.text({ label: "Podlink tytul" }),
+                  href: fields.text({ label: "Podlink URL" }),
+                }),
+                {
+                  label: "Dropdown items",
+                  itemLabel: (props) => props.fields.label.value || "New child link",
+                }
+              ),
             }),
             {
               label: "Menu Links",

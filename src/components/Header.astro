@@ -43,7 +43,7 @@ const logoImage = await resolveImage(header?.logo);
 
       <!-- CTA Buttons -->
       <div class="flex items-center gap-4">
-        <a href="{phoneHref}" class="hidden lg:flex items-center gap-2 text-text-body hover:text-brand-forest-green transition-colors">
+        <a href={phoneHref} class="hidden lg:flex items-center gap-2 text-text-body hover:text-brand-forest-green transition-colors">
           <Icon name="lucide:phone" width="18" height="18" aria-hidden="true" />
           <span>{phone}</span>
         </a>
@@ -84,7 +84,7 @@ const logoImage = await resolveImage(header?.logo);
       // Close when clicking a link in the panel
       panel.addEventListener('click', (e) => {
         const target = e.target;
-        if (target instanceof HTMLElement && target.tagName === 'A') {
+        if (target instanceof HTMLElement && target.closest('a')) {
           btn.setAttribute('aria-expanded', 'false');
           panel.classList.add('hidden');
         }
