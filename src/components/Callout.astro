@@ -1,0 +1,35 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  color?: 'red' | 'dark-green' | 'light-green';
+}
+
+const { title = '', description = '', color = 'red' } = Astro.props as Props;
+
+const variants = {
+  red: {
+    bar: 'bg-brand-thermo-red',
+    title: 'text-brand-thermo-red',
+  },
+  'dark-green': {
+    bar: 'bg-brand-forest-green',
+    title: 'text-brand-forest-green',
+  },
+  'light-green': {
+    bar: 'bg-brand-natural-green',
+    title: 'text-brand-natural-green',
+  },
+} as const;
+
+const variant = variants[color] ?? variants.red;
+---
+
+<div class="flex gap-4 p-5 rounded-xl bg-background-gray border border-gray-100 my-4">
+  <div class:list={["w-1 rounded-full flex-shrink-0", variant.bar]}></div>
+  <div>
+    {title && <p class:list={["text-sm font-semibold mb-1", variant.title]}>{title}</p>}
+    {description && <p class="text-text-body leading-relaxed text-sm">{description}</p>}
+  </div>
+</div>
+

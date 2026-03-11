@@ -5,12 +5,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { resolveImage } from '../lib/resolve-image';
 
 const realizacje = await getCollection('realizacje');
+const fallbackImage = '/hero-placeholder.svg';
 
 const sorted = await Promise.all(
   [...realizacje]
     .sort((a, b) => a.data.title.localeCompare(b.data.title, 'pl'))
     .map(async (item) => ({
       ...item,
+      displayImage: item.data.image ?? fallbackImage,
       imageMeta: await resolveImage(item.data.image),
     }))
 );
@@ -49,7 +51,7 @@ const sorted = await Promise.all(
                 />
               ) : (
                 <img
-                  src={item.data.image}
+                  src={item.displayImage}
                   alt={item.data.title}
                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"

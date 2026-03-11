@@ -82,7 +82,7 @@ export default config({
       label: "Realizacje",
       slugField: "slug",
       path: "src/content/realizacje/*",
-      format: { data: "yaml" },
+      format: { contentField: "description" },
       schema: {
         slug: fields.slug({
           name: { label: "Slug" },
@@ -92,20 +92,26 @@ export default config({
           label: "Short description",
           multiline: true,
         }),
-        description: fields.text({
+        description: fields.markdoc({
           label: "Description",
-          multiline: true,
+          options: {
+            image: {
+              directory: "public/images/realizacje",
+              publicPath: "/images/realizacje/",
+            },
+          },
+          components: contentComponents,
         }),
         image: fields.image({
           label: "Main image",
-          directory: "src/assets/pages/realizacje",
-          publicPath: "/src/assets/pages/realizacje/",
+          directory: "src/assets/realizacje",
+          publicPath: "/src/assets/realizacje/",
         }),
         gallery: fields.array(
           fields.image({
             label: "Gallery image",
-            directory: "src/assets/pages/realizacje",
-            publicPath: "/src/assets/pages/realizacje/",
+            directory: "src/assets/realizacje",
+            publicPath: "/src/assets/realizacje/",
           }),
           {
             label: "Gallery",

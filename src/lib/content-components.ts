@@ -195,6 +195,26 @@ export const contentComponents = {
         }
     }),
 
+    Callout: block({
+        label: "Callout",
+        schema: {
+            title: fields.text({ label: "Title" }),
+            description: fields.text({
+                label: "Description",
+                multiline: true,
+            }),
+            color: fields.select({
+                label: "Color",
+                options: [
+                    { label: "Red", value: "red" },
+                    { label: "Dark green", value: "dark-green" },
+                    { label: "Light green", value: "light-green" },
+                ],
+                defaultValue: "red",
+            }),
+        },
+    }),
+
     Portfolio: block({
         label: "Portfolio",
         schema: {},
