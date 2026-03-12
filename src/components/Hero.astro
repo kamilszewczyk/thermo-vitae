@@ -2,8 +2,6 @@
 import { Image } from "astro:assets";
 import { resolveImage } from "../lib/resolve-image";
 
-type TrustIndicator = { value?: string; label?: string };
-
 export interface Props {
     subtitle?: string;
     title?: string;
@@ -19,7 +17,7 @@ export interface Props {
     badgePosition?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
 }
 
-const block = Astro.props;
+const block = Astro.props as Props;
 
 const subtitle = (block.subtitle || "").trim();
 const title = (block.title || "").trim();
@@ -46,7 +44,7 @@ const hasBadge =
 
 const badgePosition = block.badgePosition ?? "bottom-left";
 
-const badgePositionClass: Record<NonNullable<Hero["badgePosition"]>, string> =
+const badgePositionClass: Record<NonNullable<Props["badgePosition"]>, string> =
     {
       "top-left": "top-6 left-6",
       "top-right": "top-6 right-6",
