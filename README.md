@@ -126,6 +126,9 @@ Set these environment variables in Netlify UI:
 
 - `KEYSTATIC_STORAGE_KIND=github`
 - `KEYSTATIC_GITHUB_REPO=<owner/repo>`
+- `KEYSTATIC_GITHUB_CLIENT_ID=<github-oauth-client-id>`
+- `KEYSTATIC_GITHUB_CLIENT_SECRET=<github-oauth-client-secret>`
+- `KEYSTATIC_SECRET=<long-random-secret>`
 - `EDITOR_BASIC_AUTH_USER=<username>` (optional but recommended)
 - `EDITOR_BASIC_AUTH_PASSWORD=<strong-password>` (optional but recommended)
 
@@ -171,6 +174,9 @@ Both workflows run on pull requests, pushes to `main`, and manual dispatch.
    - `HOSTING_PROVIDER=netlify`
    - `KEYSTATIC_STORAGE_KIND=github`
    - `KEYSTATIC_GITHUB_REPO=<owner/repo>`
+   - `KEYSTATIC_GITHUB_CLIENT_ID=<github-oauth-client-id>`
+   - `KEYSTATIC_GITHUB_CLIENT_SECRET=<github-oauth-client-secret>`
+   - `KEYSTATIC_SECRET=<long-random-secret>`
    - `EDITOR_BASIC_AUTH_USER=<editor-user>`
    - `EDITOR_BASIC_AUTH_PASSWORD=<strong-password>`
 
@@ -203,3 +209,15 @@ npm run astro -- check
 npm run build:editor
 npm run build:prod
 ```
+
+### Troubleshooting: "Unable to load collection" with JSON parse error
+
+If Keystatic shows `Unable to load collection` and `JSON.parse: unexpected end of data`, the API route usually returned an empty/failed response.
+
+Most common fix for Netlify editor deployments:
+
+- ensure all GitHub storage env vars are set: `KEYSTATIC_GITHUB_REPO`, `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`, `KEYSTATIC_SECRET`
+- redeploy after updating env vars (Netlify does not always apply them to old deploys)
+- open Netlify Function logs for `/api/keystatic/*` and confirm no auth/config errors
+- verify the GitHub OAuth app callback URL points to your editor domain
+  - `https://<your-editor-domain>/api/keystatic/github/oauth/callback`
