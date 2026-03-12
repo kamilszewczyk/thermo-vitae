@@ -153,8 +153,7 @@ Two CI workflows are included:
 - `Editor CI` (`.github/workflows/editor-ci.yml`)
   - Runs `astro check` in editor mode
   - Runs `build:editor` (Netlify adapter path)
-  - Uses `KEYSTATIC_STORAGE_KIND=github`
-  - Reads `KEYSTATIC_GITHUB_REPO` from repository variable `vars.KEYSTATIC_GITHUB_REPO`
+  - Uses `KEYSTATIC_STORAGE_KIND=local` in CI to avoid requiring GitHub OAuth secrets
   - Uploads `dist` as `editor-dist` artifact
 - `Production Static CI` (`.github/workflows/production-static-ci.yml`)
   - Runs `astro check` in production mode
@@ -198,10 +197,6 @@ Both workflows run on pull requests, pushes to `main`, and manual dispatch.
    - Use static output only (`npm run build:prod`).
    - Upload/sync `dist/` to your PHP host.
 
-7. Configure GitHub Actions repository variable
-   - Add `KEYSTATIC_GITHUB_REPO` under GitHub Actions Variables.
-   - This is used by `.github/workflows/editor-ci.yml`.
-
 ### Quick verification commands
 
 ```bash
@@ -221,3 +216,4 @@ Most common fix for Netlify editor deployments:
 - open Netlify Function logs for `/api/keystatic/*` and confirm no auth/config errors
 - verify the GitHub OAuth app callback URL points to your editor domain
   - `https://<your-editor-domain>/api/keystatic/github/oauth/callback`
+- open `https://<your-editor-domain>/api/editor-env-check.json` and verify all required env flags are `true`

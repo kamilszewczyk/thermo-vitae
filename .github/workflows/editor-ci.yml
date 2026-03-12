@@ -13,8 +13,7 @@ jobs:
     env:
       SITE_MODE: editor
       HOSTING_PROVIDER: netlify
-      KEYSTATIC_STORAGE_KIND: github
-      KEYSTATIC_GITHUB_REPO: ${{ vars.KEYSTATIC_GITHUB_REPO }}
+      KEYSTATIC_STORAGE_KIND: local
     steps:
       - name: Checkout
         uses: actions/checkout@v4
