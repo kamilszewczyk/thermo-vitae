@@ -5,14 +5,36 @@ import { contentComponents } from "./src/lib/content-components";
 function parseGithubRepo(value: string | undefined) {
   if (!value) return undefined;
 
-  const [owner, name] = value.split('/');
-  if (!owner || !name) return undefined;
+  const cleaned = value.trim().replace(/\.git$/, '');
 
-  return { owner, name };
+  if (cleaned.startsWith('https://') || cleaned.startsWith('http://')) {
+    try {
+      const url = new URL(cleaned);
+      const parts = url.pathname.replace(/^\/+/, '').split('/').filter(Boolean);
+      if (parts.length >= 2) {
+        return { owner: parts[0], name: parts[1] };
+      }
+    } catch {
+      return undefined;
+    }
+  }
+
+  const parts = cleaned.split('/').filter(Boolean);
+  if (parts.length === 2) {
+    return { owner: parts[0], name: parts[1] };
+  }
+
+  return undefined;
 }
 
+const githubStorageRequested = process.env.KEYSTATIC_STORAGE_KIND === 'github';
 const githubRepo = parseGithubRepo(process.env.KEYSTATIC_GITHUB_REPO);
-const useGithubStorage = process.env.KEYSTATIC_STORAGE_KIND === 'github' && Boolean(githubRepo);
+
+if (githubStorageRequested && !githubRepo) {
+  throw new Error('KEYSTATIC_GITHUB_REPO must be set as owner/repo (or a full GitHub repo URL).');
+}
+
+const useGithubStorage = githubStorageRequested && Boolean(githubRepo);
 
 export default config({
   storage: useGithubStorage

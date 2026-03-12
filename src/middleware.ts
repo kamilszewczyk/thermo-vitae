@@ -21,6 +21,13 @@ export const onRequest = defineMiddleware(async ({ request }, next) => {
     return next();
   }
 
+  const pathname = new URL(request.url).pathname;
+
+  // Keystatic OAuth callback and API calls must not be blocked by Basic Auth.
+  if (pathname.startsWith('/api/keystatic/')) {
+    return next();
+  }
+
   const authHeader = request.headers.get('authorization');
   if (!authHeader?.startsWith('Basic ')) {
     return new Response('Authentication required', {
@@ -53,4 +60,3 @@ export const onRequest = defineMiddleware(async ({ request }, next) => {
 
   return next();
 });
-

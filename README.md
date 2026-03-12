@@ -212,8 +212,11 @@ If Keystatic shows `Unable to load collection` and `JSON.parse: unexpected end o
 Most common fix for Netlify editor deployments:
 
 - ensure all GitHub storage env vars are set: `KEYSTATIC_GITHUB_REPO`, `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`, `KEYSTATIC_SECRET`
+- ensure `KEYSTATIC_GITHUB_REPO` is valid `owner/repo` (or full GitHub repo URL)
 - redeploy after updating env vars (Netlify does not always apply them to old deploys)
 - open Netlify Function logs for `/api/keystatic/*` and confirm no auth/config errors
 - verify the GitHub OAuth app callback URL points to your editor domain
   - `https://<your-editor-domain>/api/keystatic/github/oauth/callback`
+- if HTTP Basic Auth is enabled, this repo bypasses auth for `/api/keystatic/*` so OAuth callback can complete
 - open `https://<your-editor-domain>/api/editor-env-check.json` and verify all required env flags are `true`
+  - especially `KEYSTATIC_GITHUB_REPO_VALID: true`
