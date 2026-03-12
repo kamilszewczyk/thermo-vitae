@@ -4,12 +4,17 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
+    "dev:editor": "SITE_MODE=editor astro dev",
+    "dev:prod": "SITE_MODE=production astro dev",
     "build": "astro build",
+    "build:editor": "SITE_MODE=editor HOSTING_PROVIDER=netlify astro build",
+    "build:prod": "SITE_MODE=production astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
     "@astrojs/markdoc": "^0.15.10",
+    "@astrojs/netlify": "^6.6.5",
     "@astrojs/react": "^4.4.2",
     "@keystatic/astro": "^5.0.6",
     "@keystatic/core": "^0.5.48",
@@ -24,6 +29,8 @@
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.2.90"
+    "@astrojs/check": "^0.9.7",
+    "@iconify-json/lucide": "^1.2.90",
+    "typescript": "^5.9.3"
   }
 }

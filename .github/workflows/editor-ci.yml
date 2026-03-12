@@ -1,0 +1,43 @@
+name: Editor CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  editor-build:
+    runs-on: ubuntu-latest
+    env:
+      SITE_MODE: editor
+      HOSTING_PROVIDER: netlify
+      KEYSTATIC_STORAGE_KIND: github
+      KEYSTATIC_GITHUB_REPO: ${{ vars.KEYSTATIC_GITHUB_REPO }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.19.0
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check (editor mode)
+        run: npm run astro -- check
+
+      - name: Build editor bundle
+        run: npm run build:editor
+
+      - name: Upload editor artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: editor-dist
+          path: dist
+          if-no-files-found: error
+          retention-days: 7

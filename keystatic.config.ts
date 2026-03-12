@@ -2,10 +2,27 @@
 import { config, fields, collection, singleton } from '@keystatic/core';
 import { contentComponents } from "./src/lib/content-components";
 
+function parseGithubRepo(value: string | undefined) {
+  if (!value) return undefined;
+
+  const [owner, name] = value.split('/');
+  if (!owner || !name) return undefined;
+
+  return { owner, name };
+}
+
+const githubRepo = parseGithubRepo(process.env.KEYSTATIC_GITHUB_REPO);
+const useGithubStorage = process.env.KEYSTATIC_STORAGE_KIND === 'github' && Boolean(githubRepo);
+
 export default config({
-  storage: {
-    kind: 'local',
-  },
+  storage: useGithubStorage
+    ? {
+        kind: 'github',
+        repo: githubRepo!,
+      }
+    : {
+        kind: 'local',
+      },
   ui: {
     brand: { name: "Thermo Vitae" },
   },

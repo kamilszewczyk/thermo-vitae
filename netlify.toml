@@ -1,0 +1,13 @@
+[build]
+  command = "npm run build:editor"
+  publish = "dist"
+
+[build.environment]
+  SITE_MODE = "editor"
+  HOSTING_PROVIDER = "netlify"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
