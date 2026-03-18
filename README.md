@@ -120,6 +120,7 @@ Build settings are drafted in `netlify.toml`:
 - build command: `npm run build:editor`
 - publish directory: `dist`
 - sets `SITE_MODE=editor` and `HOSTING_PROVIDER=netlify`
+- rewrites `/keystatic/*` and `/api/keystatic/*` to Netlify's Astro SSR handler
 - sends `X-Robots-Tag: noindex, nofollow`
 
 Set these environment variables in Netlify UI:
@@ -215,8 +216,18 @@ Most common fix for Netlify editor deployments:
 - ensure `KEYSTATIC_GITHUB_REPO` is valid `owner/repo` (or full GitHub repo URL)
 - redeploy after updating env vars (Netlify does not always apply them to old deploys)
 - open Netlify Function logs for `/api/keystatic/*` and confirm no auth/config errors
+- ensure Netlify rewrites are active for Keystatic routes (already in `netlify.toml`):
+  - `/keystatic/* -> /.netlify/functions/___netlify-handler`
+  - `/api/keystatic/* -> /.netlify/functions/___netlify-handler`
 - verify the GitHub OAuth app callback URL points to your editor domain
   - `https://<your-editor-domain>/api/keystatic/github/oauth/callback`
 - if HTTP Basic Auth is enabled, this repo bypasses auth for `/api/keystatic/*` so OAuth callback can complete
 - open `https://<your-editor-domain>/api/editor-env-check.json` and verify all required env flags are `true`
   - especially `KEYSTATIC_GITHUB_REPO_VALID: true`
+
+If you still get `404` on `/api/keystatic/tree` after this:
+
+- trigger a fresh deploy with **Clear cache and deploy site** in Netlify
+- confirm the active deploy includes the latest `netlify.toml`
+- verify `https://<your-editor-domain>/api/keystatic/tree` is no longer `404`
+

@@ -6,6 +6,16 @@
   SITE_MODE = "editor"
   HOSTING_PROVIDER = "netlify"
 
+[[redirects]]
+  from = "/keystatic/*"
+  to = "/.netlify/functions/___netlify-handler"
+  status = 200
+
+[[redirects]]
+  from = "/api/keystatic/*"
+  to = "/.netlify/functions/___netlify-handler"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]
