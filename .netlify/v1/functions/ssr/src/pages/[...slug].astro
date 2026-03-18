@@ -1,0 +1,23 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+	const pages = await getCollection("pages");
+	return pages
+		.filter(page => page.id !== 'home')
+		.map((page) => ({
+			params: { slug: page.id.replace(/\.mdoc$/, "") },
+			props: { page },
+		}));
+}
+
+const { page } = Astro.props;
+
+// Astro 5+: render is a top-level function, not a method on the entry
+const { Content } = await render(page);
+---
+
+<BaseLayout title={page.data.title}>
+	<Content />
+</BaseLayout>

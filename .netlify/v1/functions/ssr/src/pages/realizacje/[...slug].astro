@@ -1,0 +1,290 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { resolveImage } from '../../lib/resolve-image';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('realizacje');
+
+  return projects.map((project) => ({
+    // Astro rest params must be a string (e.g. "a/b"), not an array.
+    params: { slug: project.data.slug },
+    props: { project },
+  }));
+}
+
+const { project: projectEntry } = Astro.props as {
+  project: CollectionEntry<'realizacje'>;
+};
+
+const allProjects = [...(await getCollection('realizacje'))].sort((a, b) =>
+  a.data.title.localeCompare(b.data.title, 'pl')
+);
+
+const staticDetails = {
+  year: '2025',
+  area: '230 m2',
+  system: 'Pompa ciepla 12 kW',
+};
+
+const fallbackImage = '/hero-placeholder.svg';
+
+const { Content } = await render(projectEntry);
+
+const project = {
+  slug: projectEntry.data.slug,
+  title: projectEntry.data.title,
+  location: projectEntry.data.location,
+  coverImage: projectEntry.data.image ?? fallbackImage,
+  gallery: projectEntry.data.gallery
+    .filter((src): src is string => Boolean(src))
+    .map((src, index) => ({
+      src,
+      caption: `Zdjecie realizacji ${index + 1}`,
+    })),
+  specs: [
+    { label: 'Kategoria', value: projectEntry.data.category },
+    { label: 'Status', value: projectEntry.data.status },
+    { label: 'Lokalizacja', value: projectEntry.data.location },
+    { label: 'GPS', value: projectEntry.data.gps_location },
+  ],
+  ...staticDetails,
+};
+
+const currentIndex = allProjects.findIndex(
+  (item) => item.data.slug === projectEntry.data.slug
+);
+
+const relatedProjects =
+  allProjects.length > 1
+    ? [
+        allProjects[(currentIndex - 1 + allProjects.length) % allProjects.length],
+        allProjects[(currentIndex + 1) % allProjects.length],
+      ].map((item, index) => ({
+        title: item.data.title,
+        location: item.data.location,
+        href: `/realizacje/${item.data.slug}`,
+        image: item.data.image ?? fallbackImage,
+        label: index === 0 ? 'Poprzednia' : 'Nastepna',
+        icon: index === 0 ? 'lucide:chevron-left' : 'lucide:chevron-right',
+        reverse: index === 1,
+      }))
+    : [];
+
+const coverImageMeta = await resolveImage(project.coverImage);
+
+const galleryItems = await Promise.all(
+  project.gallery.map(async (item) => ({
+    ...item,
+    imageMeta: await resolveImage(item.src),
+  }))
+);
+
+const relatedWithMeta = await Promise.all(
+  relatedProjects.map(async (item) => ({
+    ...item,
+    imageMeta: await resolveImage(item.image),
+  }))
+);
+---
+
+<BaseLayout title={`${project.title} | Realizacje | Thermo Vitae`}>
+  <section class="relative w-full min-h-96 h-96 overflow-hidden">
+    {coverImageMeta ? (
+        <Image
+            src={coverImageMeta}
+            alt={project.title}
+            class="absolute inset-0 w-full h-full object-cover"
+            widths={[960, 1400, 1920]}
+            sizes="100vw"
+            loading="eager"
+        />
+    ) : (
+        <img
+            src={project.coverImage}
+            alt={project.title}
+            class="absolute inset-0 w-full h-full object-cover"
+            loading="eager"
+        />
+    )}
+
+    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent"></div>
+
+    <div class="absolute top-6 left-4 sm:left-8 z-10">
+      <a
+          href="/realizacje"
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 backdrop-blur-sm border border-white/30 text-white text-sm hover:bg-white/25 transition-all"
+      >
+        <Icon name="lucide:arrow-left" width="16" height="16" aria-hidden="true" />
+        Powrot do realizacji
+      </a>
+    </div>
+
+    <div class="absolute bottom-0 left-0 right-0 pb-10 px-4 sm:px-8">
+      <div class="max-w-7xl mx-auto">
+
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3">{project.title}</h1>
+
+        <div class="flex flex-wrap items-center gap-4 text-white/80 text-sm">
+          <span class="inline-flex items-center gap-1.5">
+            <Icon name="lucide:map-pin" width="15" height="15" aria-hidden="true" />
+            {project.location}
+          </span>
+          <span class="inline-flex items-center gap-1.5">
+            <Icon name="lucide:calendar" width="15" height="15" aria-hidden="true" />
+            {project.year}
+          </span>
+          <span class="inline-flex items-center gap-1.5">
+            <Icon name="lucide:maximize-2" width="15" height="15" aria-hidden="true" />
+            {project.area}
+          </span>
+          <span class="inline-flex items-center gap-1.5">
+            <Icon name="lucide:zap" width="15" height="15" aria-hidden="true" />
+            {project.system}
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
+    <div class="grid lg:grid-cols-3 gap-12">
+      <div class="lg:col-span-2 space-y-10">
+        <div>
+          <p class="uppercase tracking-widest text-xs text-text-inactive mb-3">O projekcie</p>
+          <div class="prose max-w-none text-text-body prose-headings:text-text-primary prose-a:text-brand-forest-green">
+            <Content />
+          </div>
+        </div>
+
+        {galleryItems.length > 0 && (
+            <div>
+              <p class="uppercase tracking-widest text-xs text-text-inactive mb-4">Galeria zdjec</p>
+              <div class="grid sm:grid-cols-2 gap-3">
+                {galleryItems.map((img) => (
+                    <figure class="rounded-xl overflow-hidden bg-card border border-border">
+                      {img.imageMeta ? (
+                          <Image
+                              src={img.imageMeta}
+                              alt={img.caption}
+                              class="w-full aspect-video object-cover"
+                              widths={[640, 960, 1080]}
+                              sizes="(min-width: 640px) 50vw, 100vw"
+                              loading="lazy"
+                          />
+                      ) : (
+                          <img
+                              src={img.src}
+                              alt={img.caption}
+                              class="w-full aspect-video object-cover"
+                              loading="lazy"
+                              decoding="async"
+                          />
+                      )}
+                      <figcaption class="px-3 py-2 text-xs text-text-body bg-card">{img.caption}</figcaption>
+                    </figure>
+                ))}
+              </div>
+            </div>
+        )}
+      </div>
+
+      <aside class="space-y-6">
+        <div class="rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+          <div class="px-6 py-4 bg-brand-forest-green">
+            <p class="text-white font-semibold">Parametry techniczne</p>
+          </div>
+
+          <div class="divide-y divide-gray-100">
+            {project.specs.map((spec) => (
+                <div class="px-6 py-3 flex flex-col gap-0.5">
+                  <p class="text-xs text-text-inactive uppercase tracking-wide">{spec.label}</p>
+                  <p class="text-sm font-semibold text-text-primary">{spec.value}</p>
+                </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="rounded-2xl p-6 text-center bg-background-gray">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 bg-brand-natural-green/10">
+            <Icon name="lucide:check-circle-2" width="24" height="24" class="text-brand-natural-green" aria-hidden="true" />
+          </div>
+
+          <p class="font-semibold text-text-primary mb-2">Interesuje Cie podobna realizacja?</p>
+          <p class="text-sm text-text-body mb-5">Skontaktuj sie z nami - bezplatna wycena i doradztwo techniczne.</p>
+
+          <a
+              href="tel:+48123456789"
+              class="inline-flex items-center justify-center gap-2 w-full py-3 rounded-lg text-white font-semibold mb-3 bg-brand-forest-green transition-all hover:opacity-90"
+          >
+            <Icon name="lucide:phone" width="16" height="16" aria-hidden="true" />
+            Zadzwon teraz
+          </a>
+
+          <a
+              href="/#kontakt"
+              class="inline-flex items-center justify-center gap-2 w-full py-3 rounded-lg font-semibold border-2 border-brand-forest-green text-brand-forest-green hover:bg-brand-forest-green hover:text-white transition-all"
+          >
+            Darmowa wycena
+            <Icon name="lucide:arrow-right" width="16" height="16" aria-hidden="true" />
+          </a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="border-t border-gray-100 bg-background-gray">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <p class="text-center text-xs uppercase tracking-widest text-text-inactive mb-8">Inne realizacje</p>
+      <div class="grid sm:grid-cols-2 gap-4">
+        {relatedWithMeta.map((item) => (
+            <a
+                href={item.href}
+                class:list={[
+                  'group flex items-center gap-4 p-5 bg-card rounded-2xl border border-gray-200 hover:border-brand-forest-green hover:shadow-md transition-all',
+                  item.reverse && 'sm:flex-row-reverse sm:text-right',
+                ]}
+            >
+              <Icon
+                  name={item.icon}
+                  width="20"
+                  height="20"
+                  class="flex-shrink-0 text-text-inactive group-hover:text-brand-forest-green transition-colors"
+                  aria-hidden="true"
+              />
+
+              <div class="overflow-hidden rounded-lg w-16 h-16 flex-shrink-0">
+                {item.imageMeta ? (
+                    <Image
+                        src={item.imageMeta}
+                        alt={item.title}
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        widths={[128, 256]}
+                        sizes="64px"
+                        loading="lazy"
+                    />
+                ) : (
+                    <img
+                        src={item.image}
+                        alt={item.title}
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
+                        decoding="async"
+                    />
+                )}
+              </div>
+
+              <div class="min-w-0">
+                <p class="text-xs text-text-inactive mb-0.5">{item.label}</p>
+                <p class="text-sm font-semibold text-text-primary truncate">{item.title}</p>
+                <p class="text-xs text-text-body truncate">{item.location}</p>
+              </div>
+            </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+

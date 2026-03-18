@@ -1,0 +1,65 @@
+import { c as createComponent, m as maybeRenderHead, r as renderComponent, a as renderTemplate } from '../chunks/astro/server_BJWMEMYF.mjs';
+import 'piccolore';
+import { b as $$Icon, c as getEntry, a as renderEntry, $ as $$BaseLayout } from '../chunks/BaseLayout_BfZ6Bsvd.mjs';
+export { renderers } from '../renderers.mjs';
+
+const $$Contact = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`${maybeRenderHead()}<section class="py-16 lg:py-24 bg-background-gray" id="kontakt"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="grid lg:grid-cols-2 gap-12"> <!-- Left side - Contact form --> <div> <div class="mb-8"> <p class="uppercase tracking-wider text-sm text-text-inactive mb-4">
+SKONTAKTUJ SIĘ
+</p> <h2 class="text-3xl lg:text-4xl font-bold mb-4 text-text-primary">
+Bezpłatna wycena
+</h2> <p class="text-lg text-text-body">
+Wypełnij formularz, a skontaktujemy się z Tobą w ciągu 24 godzin
+</p> </div> <form class="space-y-6" method="post"> <div> <label class="block mb-2 text-text-primary" for="contact-name">
+Imię i nazwisko *
+</label> <input id="contact-name" name="name" type="text" class="w-full px-4 py-3 rounded-lg border border-border focus:border-brand-forest-green focus:outline-none transition-colors bg-background" placeholder="Jan Kowalski" required> </div> <div class="grid md:grid-cols-2 gap-6"> <div> <label class="block mb-2 text-text-primary" for="contact-phone">
+Telefon *
+</label> <input id="contact-phone" name="phone" type="tel" class="w-full px-4 py-3 rounded-lg border border-border focus:border-brand-forest-green focus:outline-none transition-colors bg-background" placeholder="+48 123 456 789" required> </div> <div> <label class="block mb-2 text-text-primary" for="contact-email">
+Email *
+</label> <input id="contact-email" name="email" type="email" class="w-full px-4 py-3 rounded-lg border border-border focus:border-brand-forest-green focus:outline-none transition-colors bg-background" placeholder="jan@example.com" required> </div> </div> <div> <label class="block mb-2 text-text-primary" for="contact-message">
+Wiadomość
+</label> <textarea id="contact-message" name="message" rows="5" class="w-full px-4 py-3 rounded-lg border border-border focus:border-brand-forest-green focus:outline-none transition-colors resize-none bg-background" placeholder="Opowiedz nam o swoim projekcie..."></textarea> </div> <button type="submit" class="w-full px-8 py-4 rounded-lg font-semibold text-white bg-brand-forest-green transition-all hover:shadow-lg">
+Wyślij zapytanie
+</button> <p class="text-sm text-text-inactive">
+* Pola wymagane. Twoje dane są bezpieczne i nie będą udostępniane osobom trzecim.
+</p> </form> </div> <!-- Right side - Contact info --> <div class="space-y-8"> <div class="bg-card rounded-2xl p-8 shadow-sm"> <h3 class="text-2xl font-bold mb-6 text-text-primary">
+Dane kontaktowe
+</h3> <div class="space-y-6"> <div class="flex items-start gap-4"> <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 bg-brand-natural-green"> ${renderComponent($$result, "Icon", $$Icon, { "name": "lucide:phone", "width": "20", "height": "20", "class": "text-white", "aria-hidden": "true" })} </div> <div> <p class="font-semibold mb-1 text-text-primary">Telefon</p> <a href="tel:+48123456789" class="text-text-body hover:text-brand-forest-green transition-colors">
++48 123 456 789
+</a> </div> </div> <div class="flex items-start gap-4"> <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 bg-brand-natural-green"> ${renderComponent($$result, "Icon", $$Icon, { "name": "lucide:mail", "width": "20", "height": "20", "class": "text-white", "aria-hidden": "true" })} </div> <div> <p class="font-semibold mb-1 text-text-primary">Email</p> <a href="mailto:kontakt@thermovitae.pl" class="text-text-body hover:text-brand-forest-green transition-colors">
+kontakt@thermovitae.pl
+</a> </div> </div> <div class="flex items-start gap-4"> <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 bg-brand-natural-green"> ${renderComponent($$result, "Icon", $$Icon, { "name": "lucide:map-pin", "width": "20", "height": "20", "class": "text-white", "aria-hidden": "true" })} </div> <div> <p class="font-semibold mb-1 text-text-primary">Adres</p> <p class="text-text-body">
+ul. Przykładowa 123<br>
+00-001 Warszawa
+</p> </div> </div> <div class="flex items-start gap-4"> <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 bg-brand-natural-green"> ${renderComponent($$result, "Icon", $$Icon, { "name": "lucide:clock", "width": "20", "height": "20", "class": "text-white", "aria-hidden": "true" })} </div> <div> <p class="font-semibold mb-1 text-text-primary">Godziny pracy</p> <p class="text-text-body">
+Poniedziałek - Piątek: 8:00 - 18:00<br>
+Sobota: 9:00 - 14:00
+</p> </div> </div> </div> </div> <!-- CTA box --> <div class="bg-gradient-to-br from-brand-forest-green to-brand-logo-green rounded-2xl p-8 text-white"> <h3 class="text-2xl font-bold mb-4">
+Gotowy na zmianę?
+</h3> <p class="mb-6 opacity-90">
+Dołącz do setek zadowolonych klientów, którzy obniżyli koszty ogrzewania i przeszli na ekologiczne rozwiązania.
+</p> <button class="px-6 py-3 bg-white rounded-lg font-semibold text-brand-forest-green transition-all hover:shadow-lg" type="button">
+Umów konsultację
+</button> </div> </div> </div> </div> </section>`;
+}, "/home/kamil/projects/thermo-vitae-astro/src/components/Contact.astro", void 0);
+
+const $$Index = createComponent(async ($$result, $$props, $$slots) => {
+  const homePage = await getEntry("pages", "home");
+  const rendered = homePage ? await renderEntry(homePage) : null;
+  const Content = rendered?.Content;
+  return renderTemplate`${renderComponent($$result, "BaseLayout", $$BaseLayout, { "title": "Thermo Vitae" }, { "default": async ($$result2) => renderTemplate`${Content && renderTemplate`${renderComponent($$result2, "Content", Content, {})}`}${renderComponent($$result2, "Contact", $$Contact, {})} ` })}`;
+}, "/home/kamil/projects/thermo-vitae-astro/src/pages/index.astro", void 0);
+
+const $$file = "/home/kamil/projects/thermo-vitae-astro/src/pages/index.astro";
+const $$url = "";
+
+const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: $$Index,
+  file: $$file,
+  url: $$url
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const page = () => _page;
+
+export { page };
