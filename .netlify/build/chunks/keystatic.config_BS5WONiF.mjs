@@ -225,10 +225,10 @@ function parseGithubRepo(value) {
   }
   return void 0;
 }
-const githubStorageRequested = process.env.KEYSTATIC_STORAGE_KIND === "github";
-const githubRepo = parseGithubRepo(process.env.KEYSTATIC_GITHUB_REPO);
+const githubStorageRequested = process.env.PUBLIC_KEYSTATIC_STORAGE_KIND === "github";
+const githubRepo = parseGithubRepo(process.env.PUBLIC_KEYSTATIC_GITHUB_REPO);
 if (githubStorageRequested && !githubRepo) {
-  throw new Error("KEYSTATIC_GITHUB_REPO must be set as owner/repo (or a full GitHub repo URL).");
+  throw new Error("PUBLIC_KEYSTATIC_GITHUB_REPO must be set as owner/repo (or a full GitHub repo URL).");
 }
 const useGithubStorage = githubStorageRequested && Boolean(githubRepo);
 const keystaticConfig = config({

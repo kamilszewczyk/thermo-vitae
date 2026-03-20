@@ -12,11 +12,11 @@ const siteMode = process.env.SITE_MODE ?? 'production';
 const hostingProvider = process.env.HOSTING_PROVIDER ?? 'none';
 const enableKeystatic = siteMode === 'editor';
 const useNetlifyAdapter = enableKeystatic && hostingProvider === 'netlify';
-const useGithubStorage = process.env.KEYSTATIC_STORAGE_KIND === 'github';
+const useGithubStorage = process.env.PUBLIC_KEYSTATIC_STORAGE_KIND === 'github';
 
 if (enableKeystatic && useGithubStorage) {
   const requiredEditorEnv = [
-    'KEYSTATIC_GITHUB_REPO',
+    'PUBLIC_KEYSTATIC_GITHUB_REPO',
     'KEYSTATIC_GITHUB_CLIENT_ID',
     'KEYSTATIC_GITHUB_CLIENT_SECRET',
     'KEYSTATIC_SECRET',

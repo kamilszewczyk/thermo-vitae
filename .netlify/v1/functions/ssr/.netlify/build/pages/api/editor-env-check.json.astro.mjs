@@ -23,14 +23,14 @@ const GET = () => {
       headers: { "content-type": "application/json; charset=utf-8" }
     });
   }
-  const rawRepo = process.env.KEYSTATIC_GITHUB_REPO;
+  const rawRepo = process.env.PUBLIC_KEYSTATIC_GITHUB_REPO;
   const status = {
     ok: true,
     editorMode,
     hostingProvider: process.env.HOSTING_PROVIDER ?? "none",
     env: {
-      KEYSTATIC_STORAGE_KIND: process.env.KEYSTATIC_STORAGE_KIND ?? null,
-      KEYSTATIC_GITHUB_REPO: Boolean(rawRepo),
+      PUBLIC_KEYSTATIC_STORAGE_KIND: process.env.PUBLIC_KEYSTATIC_STORAGE_KIND ?? null,
+      PUBLIC_KEYSTATIC_GITHUB_REPO: Boolean(rawRepo),
       KEYSTATIC_GITHUB_REPO_VALID: isValidRepoFormat(rawRepo),
       KEYSTATIC_GITHUB_CLIENT_ID: Boolean(process.env.KEYSTATIC_GITHUB_CLIENT_ID),
       KEYSTATIC_GITHUB_CLIENT_SECRET: Boolean(process.env.KEYSTATIC_GITHUB_CLIENT_SECRET),

@@ -125,8 +125,8 @@ Build settings are drafted in `netlify.toml`:
 
 Set these environment variables in Netlify UI:
 
-- `KEYSTATIC_STORAGE_KIND=github`
-- `KEYSTATIC_GITHUB_REPO=<owner/repo>`
+- `PUBLIC_KEYSTATIC_STORAGE_KIND=github`
+- `PUBLIC_KEYSTATIC_GITHUB_REPO=<owner/repo>`
 - `KEYSTATIC_GITHUB_CLIENT_ID=<github-oauth-client-id>`
 - `KEYSTATIC_GITHUB_CLIENT_SECRET=<github-oauth-client-secret>`
 - `KEYSTATIC_SECRET=<long-random-secret>`
@@ -154,7 +154,7 @@ Two CI workflows are included:
 - `Editor CI` (`.github/workflows/editor-ci.yml`)
   - Runs `astro check` in editor mode
   - Runs `build:editor` (Netlify adapter path)
-  - Uses `KEYSTATIC_STORAGE_KIND=local` in CI to avoid requiring GitHub OAuth secrets
+  - Uses `PUBLIC_KEYSTATIC_STORAGE_KIND=local` in CI to avoid requiring GitHub OAuth secrets
   - Uploads `dist` as `editor-dist` artifact
 - `Production Static CI` (`.github/workflows/production-static-ci.yml`)
   - Runs `astro check` in production mode
@@ -172,8 +172,8 @@ Both workflows run on pull requests, pushes to `main`, and manual dispatch.
 2. Configure Netlify environment variables (Site settings -> Environment variables)
    - `SITE_MODE=editor`
    - `HOSTING_PROVIDER=netlify`
-   - `KEYSTATIC_STORAGE_KIND=github`
-   - `KEYSTATIC_GITHUB_REPO=<owner/repo>`
+   - `PUBLIC_KEYSTATIC_STORAGE_KIND=github`
+   - `PUBLIC_KEYSTATIC_GITHUB_REPO=<owner/repo>`
    - `KEYSTATIC_GITHUB_CLIENT_ID=<github-oauth-client-id>`
    - `KEYSTATIC_GITHUB_CLIENT_SECRET=<github-oauth-client-secret>`
    - `KEYSTATIC_SECRET=<long-random-secret>`
@@ -212,8 +212,8 @@ If Keystatic shows `Unable to load collection` and `JSON.parse: unexpected end o
 
 Most common fix for Netlify editor deployments:
 
-- ensure all GitHub storage env vars are set: `KEYSTATIC_GITHUB_REPO`, `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`, `KEYSTATIC_SECRET`
-- ensure `KEYSTATIC_GITHUB_REPO` is valid `owner/repo` (or full GitHub repo URL)
+- ensure all GitHub storage env vars are set: `PUBLIC_KEYSTATIC_GITHUB_REPO`, `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`, `KEYSTATIC_SECRET`
+- ensure `PUBLIC_KEYSTATIC_GITHUB_REPO` is valid `owner/repo` (or full GitHub repo URL)
 - redeploy after updating env vars (Netlify does not always apply them to old deploys)
 - open Netlify Function logs for `/api/keystatic/*` and confirm no auth/config errors
 - ensure Netlify rewrites are active for Keystatic routes (already in `netlify.toml`):
