@@ -11,8 +11,8 @@ function parseGithubRepo(value: string | undefined) {
   return { owner, name };
 }
 
-const githubRepo = parseGithubRepo(process.env.PUBLIC_KEYSTATIC_GITHUB_REPO);
-const useGithubStorage = process.env.PUBLIC_KEYSTATIC_STORAGE_KIND === 'github' && Boolean(githubRepo);
+const githubRepo = parseGithubRepo(import.meta.env.PUBLIC_KEYSTATIC_GITHUB_REPO);
+const useGithubStorage = import.meta.env.PUBLIC_KEYSTATIC_STORAGE_KIND === 'github' && Boolean(githubRepo);
 
 export default config({
   storage: useGithubStorage
