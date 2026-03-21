@@ -45,3 +45,17 @@ export default defineConfig({
     ...(enableKeystatic ? [keystatic()] : []),
   ],
 });
+
+console.log('[build debug] SITE_MODE:', process.env.SITE_MODE);
+console.log('[build debug] HOSTING_PROVIDER:', process.env.HOSTING_PROVIDER);
+console.log(
+    '[build debug] PUBLIC_KEYSTATIC_STORAGE_KIND:',
+    process.env.PUBLIC_KEYSTATIC_STORAGE_KIND
+);
+console.log(
+    '[build debug] PUBLIC_KEYSTATIC_GITHUB_REPO:',
+    process.env.PUBLIC_KEYSTATIC_GITHUB_REPO
+);
+console.log('[build debug] enableKeystatic:', enableKeystatic);
+console.log('[build debug] useNetlifyAdapter:', useNetlifyAdapter);
+console.log('[build debug] useGithubStorage:', useGithubStorage);
