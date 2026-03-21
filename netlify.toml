@@ -6,6 +6,12 @@
   SITE_MODE = "editor"
   HOSTING_PROVIDER = "netlify"
 
+[[redirects]]
+  from = "/api/keystatic/*"
+  to = "/api/keystatic-handler/:splat"
+  status = 200
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]
