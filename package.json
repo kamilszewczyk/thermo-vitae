@@ -7,14 +7,14 @@
     "dev:editor": "SITE_MODE=editor astro dev",
     "dev:prod": "SITE_MODE=production astro dev",
     "build": "astro build",
-    "build:editor": "SITE_MODE=editor HOSTING_PROVIDER=netlify astro build",
+    "build:editor": "SITE_MODE=editor HOSTING_PROVIDER=vercel astro build",
     "build:prod": "SITE_MODE=production astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
     "@astrojs/markdoc": "^0.15.10",
-    "@astrojs/netlify": "^6.6.5",
+    "@astrojs/vercel": "^9.0.5",
     "@astrojs/react": "^4.4.2",
     "@keystatic/astro": "^5.0.6",
     "@keystatic/core": "^0.5.48",

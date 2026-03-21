@@ -1,3 +1,4 @@
+# Legacy config: editor deployment now targets Vercel (`vercel.json`).
 [build]
   command = "npm run build:editor"
   publish = "dist"
@@ -5,12 +6,6 @@
 [build.environment]
   SITE_MODE = "editor"
   HOSTING_PROVIDER = "netlify"
-
-[[redirects]]
-  from = "/api/keystatic/*"
-  to = "/api/keystatic-handler/:splat"
-  status = 200
-  force = true
 
 [[headers]]
   for = "/*"

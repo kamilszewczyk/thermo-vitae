@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SITE_MODE: editor
-      HOSTING_PROVIDER: netlify
+      HOSTING_PROVIDER: vercel
       PUBLIC_KEYSTATIC_STORAGE_KIND: local
     steps:
       - name: Checkout
@@ -36,7 +36,7 @@ jobs:
       - name: Upload editor artifact
         uses: actions/upload-artifact@v4
         with:
-          name: editor-dist
-          path: dist
+          name: editor-vercel-output
+          path: .vercel/output
           if-no-files-found: error
           retention-days: 7

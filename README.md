@@ -90,19 +90,19 @@ import Icon from 'astro-icon';
 - If an icon fails to render, verify the name identifier exists on Iconify and matches the chosen set.
 - Type errors about props usually mean using the wrong prop name; prefer `name` or `class` for sizing. Some versions may support size props differently.
 
-## Deployment: Editor on Netlify, Public on PHP
+## Deployment: Editor on Vercel, Public on PHP
 
-Recommended choice for this repo: **Netlify** for editor hosting.
+Recommended choice for this repo: **Vercel** for editor hosting.
 
 Why this is a good fit for your goal (editor only + free tier):
 
-- Netlify handles Astro server output well via `@astrojs/netlify`.
-- You can keep public production fully outside Netlify by deploying only `dist/` to your PHP server.
-- This repo now supports an editor-only mode with optional Basic Auth gate.
+- Keystatic works well with Astro SSR + `@astrojs/vercel`.
+- You can keep public production fully outside Vercel by deploying only `dist/` to your PHP server.
+- This repo supports an editor-only mode with optional Basic Auth gate.
 
 ### Environment split
 
-- `editor` environment (Netlify): `SITE_MODE=editor`, Keystatic enabled.
+- `editor` environment (Vercel): `SITE_MODE=editor`, Keystatic enabled.
 - `production` environment (your PHP server): `SITE_MODE=production`, static build only.
 
 ### Scripts
@@ -113,17 +113,17 @@ npm run build:editor
 npm run build:prod
 ```
 
-### Netlify editor project setup
+### Vercel editor project setup
 
-Build settings are drafted in `netlify.toml`:
+Build settings for Vercel:
 
-- build command: `npm run build:editor`
-- publish directory: `dist`
-- sets `SITE_MODE=editor` and `HOSTING_PROVIDER=netlify`
-- rewrites `/keystatic/*` and `/api/keystatic/*` to Netlify's Astro SSR handler
-- sends `X-Robots-Tag: noindex, nofollow`
+- framework preset: `Astro`
+- build command: `npm run build`
+- output directory: auto-detected by Astro adapter (`.vercel/output`)
+- set `SITE_MODE=editor` and `HOSTING_PROVIDER=vercel`
+- `X-Robots-Tag: noindex, nofollow` header is configured in `vercel.json`
 
-Set these environment variables in Netlify UI:
+Set these environment variables in Vercel Project Settings:
 
 - `PUBLIC_KEYSTATIC_STORAGE_KIND=github`
 - `PUBLIC_KEYSTATIC_GITHUB_REPO=<owner/repo>`
@@ -141,11 +141,11 @@ Build static files locally or in CI and upload only `dist/` to your PHP server:
 npm run build:prod
 ```
 
-### Notes on Vercel vs Netlify for this use-case
+### Notes on split deployment
 
-- Both can host the editor.
-- For this repository draft, Netlify is already wired and tends to be straightforward for editor-only SSR + static/public split.
-- If you want, Vercel can be added in a follow-up pass with an env-switched adapter path.
+- Vercel hosts editor mode (`SITE_MODE=editor`) with Keystatic routes.
+- Your PHP host serves static production output from `npm run build:prod`.
+- Keep these as separate deployments/environments.
 
 ### GitHub Actions
 
@@ -153,9 +153,9 @@ Two CI workflows are included:
 
 - `Editor CI` (`.github/workflows/editor-ci.yml`)
   - Runs `astro check` in editor mode
-  - Runs `build:editor` (Netlify adapter path)
+  - Runs `build:editor` (Vercel adapter path)
   - Uses `PUBLIC_KEYSTATIC_STORAGE_KIND=local` in CI to avoid requiring GitHub OAuth secrets
-  - Uploads `dist` as `editor-dist` artifact
+  - Uploads `.vercel/output` as `editor-vercel-output` artifact
 - `Production Static CI` (`.github/workflows/production-static-ci.yml`)
   - Runs `astro check` in production mode
   - Runs `build:prod` (static output for PHP server)
@@ -163,15 +163,15 @@ Two CI workflows are included:
 
 Both workflows run on pull requests, pushes to `main`, and manual dispatch.
 
-### Finish setup checklist (Netlify editor)
+### Finish setup checklist (Vercel editor)
 
-1. Create a dedicated Netlify site for editor access
+1. Create a dedicated Vercel project for editor access
    - Connect it to this GitHub repository.
-   - Keep this site unpublished in navigation/indexing terms (already set with `X-Robots-Tag` in `netlify.toml`).
+   - Keep this site unpublished in navigation/indexing terms (already set with `X-Robots-Tag` in `vercel.json`).
 
-2. Configure Netlify environment variables (Site settings -> Environment variables)
+2. Configure Vercel environment variables (Project Settings -> Environment Variables)
    - `SITE_MODE=editor`
-   - `HOSTING_PROVIDER=netlify`
+   - `HOSTING_PROVIDER=vercel`
    - `PUBLIC_KEYSTATIC_STORAGE_KIND=github`
    - `PUBLIC_KEYSTATIC_GITHUB_REPO=<owner/repo>`
    - `KEYSTATIC_GITHUB_CLIENT_ID=<github-oauth-client-id>`
@@ -181,9 +181,9 @@ Both workflows run on pull requests, pushes to `main`, and manual dispatch.
    - `EDITOR_BASIC_AUTH_PASSWORD=<strong-password>`
 
 3. Confirm build settings
-   - Build command: `npm run build:editor`
-   - Publish directory: `dist`
-   - These are already declared in `netlify.toml`.
+   - Framework preset: `Astro`
+   - Build command: `npm run build`
+   - Output directory: leave default (adapter writes `.vercel/output`).
 
 4. Trigger first deploy and validate editor routes
    - Open deployed site and confirm HTTP Basic Auth prompt appears.
@@ -210,15 +210,12 @@ npm run build:prod
 
 If Keystatic shows `Unable to load collection` and `JSON.parse: unexpected end of data`, the API route usually returned an empty/failed response.
 
-Most common fix for Netlify editor deployments:
+Most common fix for Vercel editor deployments:
 
 - ensure all GitHub storage env vars are set: `PUBLIC_KEYSTATIC_GITHUB_REPO`, `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`, `KEYSTATIC_SECRET`
 - ensure `PUBLIC_KEYSTATIC_GITHUB_REPO` is valid `owner/repo` (or full GitHub repo URL)
-- redeploy after updating env vars (Netlify does not always apply them to old deploys)
-- open Netlify Function logs for `/api/keystatic/*` and confirm no auth/config errors
-- ensure Netlify rewrites are active for Keystatic routes (already in `netlify.toml`):
-  - `/keystatic/* -> /.netlify/functions/___netlify-handler`
-  - `/api/keystatic/* -> /.netlify/functions/___netlify-handler`
+- redeploy after updating env vars (to apply new runtime env values)
+- check Vercel Function logs for `/api/keystatic/*` and confirm no auth/config errors
 - verify the GitHub OAuth app callback URL points to your editor domain
   - `https://<your-editor-domain>/api/keystatic/github/oauth/callback`
 - if HTTP Basic Auth is enabled, this repo bypasses auth for `/api/keystatic/*` so OAuth callback can complete
@@ -227,7 +224,7 @@ Most common fix for Netlify editor deployments:
 
 If you still get `404` on `/api/keystatic/tree` after this:
 
-- trigger a fresh deploy with **Clear cache and deploy site** in Netlify
-- confirm the active deploy includes the latest `netlify.toml`
+- trigger a fresh deploy in Vercel after confirming environment variables
+- confirm the active deploy includes the latest `vercel.json`
 - verify `https://<your-editor-domain>/api/keystatic/tree` is no longer `404`
 
