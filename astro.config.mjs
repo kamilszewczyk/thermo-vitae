@@ -26,4 +26,11 @@ export default defineConfig({
     markdoc(),
     ...(enableKeystatic ? [keystatic()] : []),
   ],
+  security: {
+    allowedDomains: [
+      {
+        hostname: 'thermo-vitae.vercel.app'
+      }
+    ]
+  }
 });
