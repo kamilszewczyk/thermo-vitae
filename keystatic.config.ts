@@ -17,12 +17,14 @@ const useGithubStorage = import.meta.env.PUBLIC_KEYSTATIC_STORAGE_KIND === 'gith
 export default config({
   storage: useGithubStorage
     ? {
-        kind: 'github',
-        repo: githubRepo!,
+        kind: 'cloud',
       }
     : {
         kind: 'local',
       },
+  cloud: {
+    project: 'thermo-vitae/thermo-vitae',
+  },
   ui: {
     brand: { name: "Thermo Vitae" },
   },
