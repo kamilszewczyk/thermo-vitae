@@ -1,4 +1,8 @@
-import { createReader } from "@keystatic/core/reader";
-import keystaticConfig from "../../keystatic.config";
+import { createReader } from '@keystatic/core/reader';
+import config from '../../keystatic.config';
+import path from 'node:path';
 
-export const reader = createReader(process.cwd(), keystaticConfig);
+const root = process.cwd();
+console.log('Keystatic reader root:', root);
+
+export const reader = createReader(root, config);

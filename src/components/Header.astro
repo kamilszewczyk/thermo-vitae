@@ -5,6 +5,12 @@ import { Image } from "astro:assets";
 import { reader } from "../lib/keystatic";
 
 const header = await reader.singletons.header.read();
+
+console.log(
+    'HEADER DATA',
+    JSON.stringify(header, null, 2)
+);
+
 const phone = header?.phone ?? "+48 123 456 789";
 const phoneHref = `tel:${phone.replace(/\s+/g, '')}`;
 const logoAlt = header?.logoAlt ?? "Thermo Vitae";
