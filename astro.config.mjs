@@ -16,7 +16,13 @@ const useVercelAdapter = enableKeystatic && hostingProvider === 'vercel';
 // https://astro.build/config
 export default defineConfig({
   output: enableKeystatic ? 'server' : 'static',
-  adapter: useVercelAdapter ? vercel({}) : undefined,
+  adapter: useVercelAdapter ? vercel({
+      includeFiles: [
+        'src/content/**/*',
+        'public/images/**/*',
+        'src/assets/**/*',
+      ],
+    }) : undefined,
   vite: {
     plugins: [tailwindcss()]
   },
