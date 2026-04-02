@@ -2,14 +2,10 @@
 import MenuLinks from "./MenuLinks.astro";
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
-import { reader } from "../lib/keystatic";
+import { getEntry } from "astro:content";
 
-const header = await reader.singletons.header.read();
-
-console.log(
-    'HEADER DATA',
-    JSON.stringify(header, null, 2)
-);
+const headerEntry = await getEntry("header", "header");
+const header = headerEntry?.data;
 
 const phone = header?.phone ?? "+48 123 456 789";
 const phoneHref = `tel:${phone.replace(/\s+/g, '')}`;

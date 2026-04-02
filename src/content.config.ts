@@ -35,4 +35,44 @@ const realizacje = defineCollection({
     }),
 });
 
-export const collections = { pages, realizacje };
+const header = defineCollection({
+    loader: glob({ pattern: "header.yaml", base: "./src/content" }),
+    schema: z.object({
+        logo: z.string().optional(),
+        logoAlt: z.string().optional(),
+        phone: z.string().optional(),
+    }),
+});
+
+const navigation = defineCollection({
+    loader: glob({ pattern: "navigation.yaml", base: "./src/content" }),
+    schema: z.object({
+        links: z
+            .array(
+                z.object({
+                    label: z.string(),
+                    href: z.string().optional(),
+                    children: z
+                        .array(
+                            z.object({
+                                label: z.string(),
+                                href: z.string(),
+                            })
+                        )
+                        .default([]),
+                })
+            )
+            .default([]),
+    }),
+});
+
+const footer = defineCollection({
+    loader: glob({ pattern: "footer.yaml", base: "./src/content" }),
+    schema: z.object({
+        copyright: z.string().optional(),
+        address: z.string().optional(),
+        email: z.string().optional(),
+    }),
+});
+
+export const collections = { pages, realizacje, header, navigation, footer };

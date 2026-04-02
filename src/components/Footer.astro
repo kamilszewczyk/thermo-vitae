@@ -1,5 +1,13 @@
 ---
 import { Icon } from 'astro-icon/components'
+import { getCollection } from "astro:content";
+
+const [footerEntry] = await getCollection("footer");
+const footer = footerEntry?.data;
+
+const address = footer?.address ?? "ul. Przykładowa 123\n00-001 Warszawa";
+const email = footer?.email ?? "kontakt@thermovitae.pl";
+const copyright = footer?.copyright ?? "© 2026 Thermo Vitae. Wszelkie prawa zastrzeżone.";
 ---
 <footer class="bg-foreground text-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -63,13 +71,14 @@ import { Icon } from 'astro-icon/components'
       <div>
         <h4 class="text-lg font-bold mb-6">Kontakt</h4>
         <ul class="space-y-3 text-text-inactive">
-          <li>ul. Przykładowa 123</li>
-          <li>00-001 Warszawa</li>
+          {address.split(/\r?\n/).filter(Boolean).map((line) => (
+            <li>{line}</li>
+          ))}
           <li class="pt-3">
             <a href="tel:+48123456789" class="hover:text-white transition-colors">+48 123 456 789</a>
           </li>
           <li>
-            <a href="mailto:kontakt@thermovitae.pl" class="hover:text-white transition-colors">kontakt@thermovitae.pl</a>
+            <a href={`mailto:${email}`} class="hover:text-white transition-colors">{email}</a>
           </li>
         </ul>
       </div>
@@ -78,7 +87,7 @@ import { Icon } from 'astro-icon/components'
     <!-- Bottom bar -->
     <div class="border-t border-border pt-8">
       <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-        <p class="text-text-inactive text-sm">© 2026 Thermo Vitae. Wszelkie prawa zastrzeżone.</p>
+        <p class="text-text-inactive text-sm">{copyright}</p>
         <div class="flex gap-6 text-sm">
           <a href="#" class="text-text-inactive hover:text-white transition-colors">Polityka prywatności</a>
           <a href="#" class="text-text-inactive hover:text-white transition-colors">Regulamin</a>

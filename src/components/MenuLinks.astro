@@ -1,9 +1,9 @@
 ---
 import { Icon } from "astro-icon/components";
-import { reader } from "../lib/keystatic";
+import { getCollection } from "astro:content";
 
-const navigation = await reader.singletons.navigation.read();
-const links = navigation?.links ?? [];
+const [navigationEntry] = await getCollection("navigation");
+const links = navigationEntry?.data.links ?? [];
 
 const { class: className = "", linkClass = "" } = Astro.props;
 

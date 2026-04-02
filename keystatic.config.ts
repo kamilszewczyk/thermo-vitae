@@ -64,8 +64,8 @@ export default config({
         logo: fields.image({
           label: "Logo",
           description: "Brand logo image",
-          directory: "public/images",
-          publicPath: "/images/",
+          directory: "src/assets",
+          publicPath: "/src/assets/",
         }),
         logoAlt: fields.text({
           label: "Logo alt text",
@@ -135,14 +135,14 @@ export default config({
         }),
         image: fields.image({
           label: "Main image",
-          directory: "public/images/realizacje",
-          publicPath: "/images/realizacje/",
+          directory: "src/assets/realizacje",
+          publicPath: "/src/assets/realizacje/",
         }),
         gallery: fields.array(
           fields.image({
             label: "Gallery image",
-            directory: "public/images/realizacje",
-            publicPath: "/images/realizacje/",
+            directory: "src/assets/realizacje",
+            publicPath: "/src/assets/realizacje/",
           }),
           {
             label: "Gallery",

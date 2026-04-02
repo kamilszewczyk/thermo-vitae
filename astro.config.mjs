@@ -19,7 +19,8 @@ export default defineConfig({
   adapter: useVercelAdapter ? vercel({
       includeFiles: [
         'src/content',
-        'public/images'
+        'public/images',
+        'src/assets',
       ],
     }) : undefined,
   vite: {
