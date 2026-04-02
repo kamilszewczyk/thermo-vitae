@@ -101,8 +101,8 @@ export default config({
             image: {
               // Inline content images go to public/ (no optimization,
               // but they just work as plain <img> tags)
-              directory: "public/images/pages",
-              publicPath: "/images/pages/",
+              directory: "src/assets/pages",
+              publicPath: "/src/assets/pages/",
             },
           },
           components: contentComponents,
@@ -127,8 +127,8 @@ export default config({
           label: "Description",
           options: {
             image: {
-              directory: "public/images/realizacje",
-              publicPath: "/images/realizacje/",
+              directory: "src/assets/realizacje",
+              publicPath: "/src/assets/realizacje/",
             },
           },
           components: contentComponents,
