@@ -18,9 +18,8 @@ export default defineConfig({
   output: enableKeystatic ? 'server' : 'static',
   adapter: useVercelAdapter ? vercel({
       includeFiles: [
-        'src/content/**/*',
-        'public/images/**/*',
-        'src/assets/**/*',
+        'src/content',
+        'public/images'
       ],
     }) : undefined,
   vite: {
