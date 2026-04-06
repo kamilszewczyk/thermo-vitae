@@ -15,13 +15,24 @@ export async function getStaticPaths() {
   }));
 }
 
-const { project: projectEntry } = Astro.props as {
-  project: CollectionEntry<'realizacje'>;
-};
-
 const allProjects = [...(await getCollection('realizacje'))].sort((a, b) =>
   a.data.title.localeCompare(b.data.title, 'pl')
 );
+
+const { project: staticProjectEntry } = Astro.props as {
+  project?: CollectionEntry<'realizacje'>;
+};
+
+const slugParam = Astro.params.slug;
+const slug = Array.isArray(slugParam) ? slugParam.join('/') : slugParam;
+
+// In server mode, Astro.props from getStaticPaths can be unavailable.
+const projectEntry =
+  staticProjectEntry ?? allProjects.find((item) => item.data.slug === slug);
+
+if (!projectEntry) {
+  throw Astro.redirect('/realizacje');
+}
 
 const staticDetails = {
   year: '2025',

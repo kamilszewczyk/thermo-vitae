@@ -12,7 +12,21 @@ export async function getStaticPaths() {
 		}));
 }
 
-const { page } = Astro.props;
+const allPages = await getCollection('pages');
+const { page: staticPage } = Astro.props as {
+	page?: (typeof allPages)[number];
+};
+
+const slugParam = Astro.params.slug;
+const slug = Array.isArray(slugParam) ? slugParam.join('/') : slugParam;
+
+const page =
+	staticPage ??
+	allPages.find((item) => item.id.replace(/\.mdoc$/, '') === slug);
+
+if (!page) {
+	throw Astro.redirect('/');
+}
 
 // Astro 5+: render is a top-level function, not a method on the entry
 const { Content } = await render(page);
