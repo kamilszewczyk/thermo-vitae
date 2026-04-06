@@ -71,19 +71,97 @@ export default config({
           label: "Logo alt text",
           defaultValue: "Thermo Vitae",
         }),
-        phone: fields.text({
-          label: "Phone number",
-          defaultValue: "+48 123 456 789",
-        }),
       },
     }),
     footer: singleton({
       label: "Footer",
       path: "src/content/footer",
       schema: {
+        logo: fields.image({
+          label: "Logo",
+          description: "Brand logo image",
+          directory: "src/assets",
+          publicPath: "/src/assets/",
+        }),
+        logoAlt: fields.text({
+          label: "Logo alt text",
+          defaultValue: "Thermo Vitae",
+        }),
+        footer_copy: fields.text({
+          label: "Footer copy",
+          multiline: true,
+        }),
+        second_column: fields.object(
+          {
+            title: fields.text({ label: "Second column title" }),
+            links: fields.array(
+              fields.object({
+                label: fields.text({ label: "Label" }),
+                href: fields.text({ label: "Link (href)" }),
+              }),
+              {
+                label: "Second column links",
+                itemLabel: (item) => item.fields.label.value || "Link",
+              }
+            ),
+          },
+          {
+            label: "Second column",
+          }
+        ),
+        third_column: fields.object(
+          {
+            title: fields.text({ label: "Third column title" }),
+            links: fields.array(
+              fields.object({
+                label: fields.text({ label: "Label" }),
+                href: fields.text({ label: "Link (href)" }),
+              }),
+              {
+                label: "Third column links",
+                itemLabel: (item) => item.fields.label.value || "Link",
+              }
+            ),
+          },
+          {
+            label: "Third column",
+          }
+        ),
+        bottom_links: fields.array(
+          fields.object({
+            label: fields.text({ label: "Label" }),
+            href: fields.text({ label: "Link (href)" }),
+          }),
+          {
+            label: "Bottom links",
+            itemLabel: (item) => item.fields.label.value || "Link",
+          }
+        ),
         copyright: fields.text({ label: "Copyright text" }),
+      },
+    }),
+    information: singleton({
+      label: "Information",
+      path: "src/content/information",
+      schema: {
+        phone: fields.text({
+          label: "Phone number",
+          defaultValue: "+48 123 456 789",
+        }),
         address: fields.text({ label: "Address", multiline: true }),
         email: fields.text({ label: "Email" }),
+        opening_hours: fields.text({ label: "Opening hours", multiline: true }),
+        social: fields.array(
+            fields.object({
+              label: fields.text({ label: "Label" }),
+              href: fields.text({ label: "Link (href)" }),
+              icon: fields.text({ label: "Icon (lucide:)" }),
+            }),
+            {
+              label: "Socials",
+              itemLabel: (item) => item.fields.label.value || "Social"
+            }
+        ),
       },
     }),
   },

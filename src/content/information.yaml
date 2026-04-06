@@ -1,0 +1,17 @@
+phone: +48 501 437 550
+address: |-
+  Park Naukowo-Technologiczny
+  ul. Podmiejska 5 lok. 110
+  19-300 Ełk
+email: biuro@thermo-vitae.eu
+opening_hours: 'Poniedziałek - Piątek: 8:00 - 15:00'
+social:
+  - label: Facebook
+    href: facebook.com
+    icon: facebook
+  - label: LinkedIn
+    href: linkedin.com
+    icon: linkedin
+  - label: Instagram
+    href: instagram.com
+    icon: instagram

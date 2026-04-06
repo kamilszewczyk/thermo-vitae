@@ -1,1 +1,33 @@
-copyright: test
+logo: /src/assets/logo.png
+logoAlt: Logo
+footer_copy: Profesjonalne systemy grzewcze oparte na odnawialnych źródłach energii. 15 lat doświadczenia w branży.
+second_column:
+  title: Usługi
+  links:
+    - label: Pompy ciepła powietrze-woda
+      href: '#'
+    - label: Pompy ciepła gruntowe
+      href: '#'
+    - label: Systemy hybrydowe
+      href: '#'
+    - label: Serwis i konserwacja
+      href: '#'
+third_column:
+  title: Firma
+  links:
+    - label: O nas
+      href: '#'
+    - label: Realizacje
+      href: '#'
+    - label: Blog
+      href: '#'
+    - label: Kariera
+      href: '#'
+bottom_links:
+  - label: Polityka prywatności
+    href: '#'
+  - label: Regulamin
+    href: '#'
+  - label: Cookies
+    href: '#'
+copyright: © 2026 Thermo Vitae. Wszelkie prawa zastrzeżone.

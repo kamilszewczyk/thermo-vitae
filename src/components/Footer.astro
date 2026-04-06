@@ -1,69 +1,115 @@
 ---
 import { Icon } from 'astro-icon/components'
-import { getCollection } from "astro:content";
+import { getEntry } from "astro:content";
 
-const [footerEntry] = await getCollection("footer");
+const footerEntry = await getEntry("footer", "footer");
 const footer = footerEntry?.data;
 
-const address = footer?.address ?? "ul. Przykładowa 123\n00-001 Warszawa";
-const email = footer?.email ?? "kontakt@thermovitae.pl";
+const informationEntry = await getEntry("information", "information");
+const information = informationEntry?.data;
+
+const phone = information?.phone ?? "+48 123 456 789";
+const phoneHref = `tel:${phone.replace(/\s+/g, '')}`;
+const address = information?.address ?? "ul. Przykładowa 123\n00-001 Warszawa";
+const email = information?.email ?? "kontakt@thermovitae.pl";
+
+const allowedSocialIcons = new Set([
+  "facebook",
+  "instagram",
+  "linkedin",
+  "youtube",
+  "twitter",
+]);
+
+const socials = (information?.social ?? [])
+  .map((social) => {
+    const rawIcon = social?.icon?.trim();
+    if (!social?.href || !rawIcon) return null;
+
+    if (!allowedSocialIcons.has(rawIcon)) return null;
+
+    return {
+      ...social,
+      iconName: `lucide:${rawIcon}`,
+    };
+  })
+  .filter((social): social is { label: string; href: string; icon: string; iconName: string } => Boolean(social));
+
+const footerCopy = footer?.footer_copy
+  ?? "Profesjonalne systemy grzewcze oparte na odnawialnych źródłach energii. 15 lat doświadczenia w branży.";
+
+const secondColumn = footer?.second_column;
+const thirdColumn = footer?.third_column;
+const bottomLinks = (footer?.bottom_links ?? []).slice(0, 4);
+
 const copyright = footer?.copyright ?? "© 2026 Thermo Vitae. Wszelkie prawa zastrzeżone.";
+
+const logoAlt = footer?.logoAlt ?? "Thermo Vitae";
+
+import { resolveImage } from "../lib/resolve-image";
+import {Image} from "astro:assets";
+const logoImage = await resolveImage(footer?.logo);
 ---
 <footer class="bg-foreground text-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
       <!-- Company info -->
       <div>
-        <div class="flex items-center gap-2 mb-6">
-          <span class="text-2xl font-bold text-brand-logo-green">Thermo</span>
-          <span class="text-2xl font-bold text-brand-thermo-red"> Vitae</span>
-        </div>
+        {logoImage ? (
+            <Image
+                src={logoImage}
+                alt={logoAlt}
+                height={48}
+                class="h-12 w-auto mb-4"
+            />
+        ) : (
+            <!-- Fallback: text logo if no image uploaded yet -->
+            <div class="relative">
+            <span class="text-3xl font-bold text-brand-logo-green">
+              Thermo
+            </span>
+              <span class="text-3xl font-bold text-brand-thermo-red">
+              {" "}Vitae
+            </span>
+            </div>
+        )}
         <p class="text-text-inactive mb-6 leading-relaxed">
-          Profesjonalne systemy grzewcze oparte na odnawialnych źródłach energii. 15 lat doświadczenia w branży.
+          {footerCopy}
         </p>
-        <div class="flex gap-4">
-          <a href="#" class="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-brand-forest-green transition-colors" aria-label="Facebook">
-            <Icon name="lucide:facebook" width="18" height="18" aria-hidden="true" />
-          </a>
-          <a href="#" class="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-brand-forest-green transition-colors" aria-label="LinkedIn">
-            <Icon name="lucide:linkedin" width="18" height="18" aria-hidden="true" />
-          </a>
-          <a href="#" class="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-brand-forest-green transition-colors" aria-label="Instagram">
-            <Icon name="lucide:instagram" width="18" height="18" aria-hidden="true" />
-          </a>
-          <a href="#" class="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-brand-forest-green transition-colors" aria-label="YouTube">
-            <Icon name="lucide:youtube" width="18" height="18" aria-hidden="true" />
-          </a>
-        </div>
+        {socials.length > 0 && (
+          <div class="flex gap-4">
+            {socials.map((social) => (
+              <a
+                href={social.href}
+                class="w-10 h-10 rounded-full flex items-center justify-center bg-brand-forest-green hover:bg-white hover:text-black transition-colors"
+                aria-label={social.label}
+              >
+                <Icon name={social.iconName} width="18" height="18" aria-hidden="true" />
+              </a>
+            ))}
+          </div>
+        )}
       </div>
 
       <!-- Quick links -->
       <div>
-        <h4 class="text-lg font-bold mb-6">Usługi</h4>
+        <h4 class="text-lg font-bold mb-6">{secondColumn?.title ?? "Usługi"}</h4>
         <ul class="space-y-3">
-          <li>
-            <a href="#" class="text-text-inactive hover:text-white transition-colors">Pompy ciepła powietrze-woda</a>
-          </li>
-          <li>
-            <a href="#" class="text-text-inactive hover:text-white transition-colors">Pompy ciepła gruntowe</a>
-          </li>
-          <li>
-            <a href="#" class="text-text-inactive hover:text-white transition-colors">Systemy hybrydowe</a>
-          </li>
-          <li>
-            <a href="#" class="text-text-inactive hover:text-white transition-colors">Serwis i konserwacja</a>
-          </li>
+          {(secondColumn?.links ?? []).slice(0, 4).map((link) => (
+            <li>
+              <a href={link.href} class="text-text-inactive hover:text-white transition-colors">{link.label}</a>
+            </li>
+          ))}
         </ul>
       </div>
 
       <!-- Company -->
       <div>
-        <h4 class="text-lg font-bold mb-6">Firma</h4>
+        <h4 class="text-lg font-bold mb-6">{thirdColumn?.title ?? "Firma"}</h4>
         <ul class="space-y-3">
-          <li><a href="#" class="text-text-inactive hover:text-white transition-colors">O nas</a></li>
-          <li><a href="#" class="text-text-inactive hover:text-white transition-colors">Realizacje</a></li>
-          <li><a href="#" class="text-text-inactive hover:text-white transition-colors">Blog</a></li>
-          <li><a href="#" class="text-text-inactive hover:text-white transition-colors">Kariera</a></li>
+          {(thirdColumn?.links ?? []).slice(0, 4).map((link) => (
+            <li><a href={link.href} class="text-text-inactive hover:text-white transition-colors">{link.label}</a></li>
+          ))}
         </ul>
       </div>
 
@@ -75,7 +121,7 @@ const copyright = footer?.copyright ?? "© 2026 Thermo Vitae. Wszelkie prawa zas
             <li>{line}</li>
           ))}
           <li class="pt-3">
-            <a href="tel:+48123456789" class="hover:text-white transition-colors">+48 123 456 789</a>
+            <a href={phoneHref} class="hover:text-white transition-colors">{phone}</a>
           </li>
           <li>
             <a href={`mailto:${email}`} class="hover:text-white transition-colors">{email}</a>
@@ -88,11 +134,13 @@ const copyright = footer?.copyright ?? "© 2026 Thermo Vitae. Wszelkie prawa zas
     <div class="border-t border-border pt-8">
       <div class="flex flex-col md:flex-row justify-between items-center gap-4">
         <p class="text-text-inactive text-sm">{copyright}</p>
-        <div class="flex gap-6 text-sm">
-          <a href="#" class="text-text-inactive hover:text-white transition-colors">Polityka prywatności</a>
-          <a href="#" class="text-text-inactive hover:text-white transition-colors">Regulamin</a>
-          <a href="#" class="text-text-inactive hover:text-white transition-colors">Cookies</a>
-        </div>
+        {bottomLinks.length > 0 && (
+          <div class="flex gap-6 text-sm">
+            {bottomLinks.map((link) => (
+              <a href={link.href} class="text-text-inactive hover:text-white transition-colors">{link.label}</a>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   </div>
