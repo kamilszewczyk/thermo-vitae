@@ -26,10 +26,19 @@ const description = (block.description || '').trim()
 const features = (block.features ?? []).slice(0, 4)
 const featuresLink = block.featuresLink ?? 'none'
 
+const featureCount = Math.min(Math.max(features.length, 1), 4)
+const gridColsClassByCount = [
+  'md:grid-cols-1 lg:grid-cols-1',
+  'md:grid-cols-2 lg:grid-cols-2',
+  'md:grid-cols-3 lg:grid-cols-3',
+  'md:grid-cols-4 lg:grid-cols-4',
+]
+const gridColsClass = gridColsClassByCount[featureCount - 1]
+
 const hasText = Boolean(subtitle || title || description)
 const hasFeatures = features.length > 0
 ---
-<section class="py-16">
+<section class="not-prose py-16">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     {hasText && (
       <div class="text-center mb-16">
@@ -60,7 +69,7 @@ const hasFeatures = features.length > 0
           ></div>
         )}
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+        <div class:list={['grid gap-8 relative', gridColsClass]}>
           {features.map((feature) => {
             const number = (feature.number || '').trim()
             const icon = (feature.icon || '').trim()

@@ -210,3 +210,36 @@
         line-height: 1.5;
     }
 }
+
+@layer components {
+    .mdoc-content {
+        @apply mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14;
+    }
+
+    .mdoc-prose {
+        @apply text-text-body;
+    }
+
+    .mdoc-prose > article {
+        @apply w-full;
+    }
+
+    /* Markdoc output is wrapped in <article>, so scope readable width there. */
+    .mdoc-prose > article > :where(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote, pre, table, hr) {
+        @apply mx-auto w-full max-w-4xl lg:max-w-5xl;
+    }
+
+    .mdoc-prose > article > h2 {
+        @apply mt-16 mb-6;
+    }
+
+    .mdoc-prose > article > h2:first-child {
+        @apply mt-0;
+    }
+
+    /* Keep callout-like custom blocks aligned with prose width, but keep full section blocks full-bleed. */
+    .mdoc-prose > article > .not-prose:not(section) {
+        @apply mx-auto w-full max-w-4xl lg:max-w-5xl;
+    }
+}
+

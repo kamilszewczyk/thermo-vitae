@@ -1,6 +1,8 @@
 logo: /src/assets/logo.png
 logoAlt: Logo
-footer_copy: Profesjonalne systemy grzewcze oparte na odnawialnych źródłach energii. 15 lat doświadczenia w branży.
+footer_copy: >-
+  Profesjonalne systemy grzewcze oparte na odnawialnych źródłach energii. 15 lat
+  doświadczenia w branży.
 second_column:
   title: Usługi
   links:
@@ -15,13 +17,7 @@ second_column:
 third_column:
   title: Firma
   links:
-    - label: O nas
-      href: '#'
     - label: Realizacje
-      href: '#'
-    - label: Blog
-      href: '#'
-    - label: Kariera
       href: '#'
 bottom_links:
   - label: Polityka prywatności

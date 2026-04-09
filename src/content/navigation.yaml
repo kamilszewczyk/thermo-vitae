@@ -9,8 +9,11 @@ links:
       - label: Rekuperacja
         href: /uslugi/rekuperacja
   - label: Jak działamy
-    href: /proces
+    href: /jak-dzialamy
+    children: []
   - label: Realizacje
     href: /realizacje
+    children: []
   - label: Kontakt
-    href: /kontakt
+    href: '#kontakt'
+    children: []

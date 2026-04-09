@@ -8,6 +8,10 @@ const rendered = homePage ? await render(homePage) : null;
 const Content = rendered?.Content;
 ---
 <BaseLayout title="Thermo Vitae">
-  {Content && (<Content />)}
+  {Content && (
+    <div class="mdoc-content mdoc-prose prose max-w-none prose-zinc lg:prose-lg prose-headings:text-text-primary prose-p:text-text-primary prose-li:text-text-primary prose-strong:text-text-primary prose-a:text-brand-forest-green hover:prose-a:text-brand-natural-green">
+      <Content />
+    </div>
+  )}
   <Contact />
 </BaseLayout>
