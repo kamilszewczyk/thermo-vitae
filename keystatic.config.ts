@@ -172,7 +172,13 @@ export default config({
       path: "src/content/pages/*",
       format: { contentField: "content" },
       schema: {
-        title: fields.slug({ name: { label: "Title" } }),
+        title: fields.text({
+          label: "Internal title (used for file name)",
+        }),
+        slug: fields.text({
+          label: "Slug / path",
+          description: "Public URL path, e.g. uslugi/pompy-ciepla",
+        }),
         content: fields.markdoc({
           label: "Content",
           options: {

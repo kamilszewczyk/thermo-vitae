@@ -5,9 +5,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 export async function getStaticPaths() {
 	const pages = await getCollection("pages");
 	return pages
-		.filter(page => page.id !== 'home')
+		.filter(page => (page.data.slug ?? page.id.replace(/\.mdoc$/, '')) !== 'home')
 		.map((page) => ({
-			params: { slug: page.id.replace(/\.mdoc$/, "") },
+			params: { slug: page.data.slug ?? page.id.replace(/\.mdoc$/, "") },
 			props: { page },
 		}));
 }
@@ -22,7 +22,7 @@ const slug = Array.isArray(slugParam) ? slugParam.join('/') : slugParam;
 
 const page =
 	staticPage ??
-	allPages.find((item) => item.id.replace(/\.mdoc$/, '') === slug);
+	allPages.find((item) => (item.data.slug ?? item.id.replace(/\.mdoc$/, '')) === slug);
 
 if (!page) {
 	throw Astro.redirect('/');

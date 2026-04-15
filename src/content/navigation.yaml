@@ -15,5 +15,5 @@ links:
     href: /realizacje
     children: []
   - label: Kontakt
-    href: '#kontakt'
+    href: /#kontakt
     children: []
