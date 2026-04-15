@@ -9,6 +9,7 @@ const fallbackImage = '/hero-placeholder.svg';
 
 const sorted = await Promise.all(
   [...realizacje]
+    .filter((item) => item.data.show_full_page)
     .sort((a, b) => a.data.title.localeCompare(b.data.title, 'pl'))
     .map(async (item) => ({
       ...item,

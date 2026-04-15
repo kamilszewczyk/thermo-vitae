@@ -18,12 +18,14 @@ const realizacje = defineCollection({
     schema: z.object({
         slug: z.string(),
         title: z.string(),
+        show_full_page: z.boolean().default(true),
         short_description: z.string(),
         // Description is now the Markdoc body (contentField), not frontmatter.
         image: z.string().nullable().optional(),
         gallery: z.array(z.string().nullable()).default([]),
         location: z.string(),
-        gps_location: z.string(),
+        gps_latitude: z.string(),
+        gps_longitude: z.string(),
         status: z.enum(["W trakcie", "Zrealizowano"]),
         category: z.enum([
             "Pompy ciepła",

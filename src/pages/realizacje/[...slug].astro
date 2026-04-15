@@ -47,7 +47,6 @@ const { Content } = await render(projectEntry);
 const project = {
   slug: projectEntry.data.slug,
   title: projectEntry.data.title,
-  location: projectEntry.data.location,
   coverImage: projectEntry.data.image ?? fallbackImage,
   gallery: projectEntry.data.gallery
     .filter((src): src is string => Boolean(src))
@@ -75,7 +74,6 @@ const relatedProjects =
         allProjects[(currentIndex + 1) % allProjects.length],
       ].map((item, index) => ({
         title: item.data.title,
-        location: item.data.location,
         href: `/realizacje/${item.data.slug}`,
         image: item.data.image ?? fallbackImage,
         label: index === 0 ? 'Poprzednia' : 'Nastepna',
@@ -139,10 +137,6 @@ const relatedWithMeta = await Promise.all(
         <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3">{project.title}</h1>
 
         <div class="flex flex-wrap items-center gap-4 text-white/80 text-sm">
-          <span class="inline-flex items-center gap-1.5">
-            <Icon name="lucide:map-pin" width="15" height="15" aria-hidden="true" />
-            {project.location}
-          </span>
           <span class="inline-flex items-center gap-1.5">
             <Icon name="lucide:calendar" width="15" height="15" aria-hidden="true" />
             {project.year}
@@ -290,7 +284,6 @@ const relatedWithMeta = await Promise.all(
               <div class="min-w-0">
                 <p class="text-xs text-text-inactive mb-0.5">{item.label}</p>
                 <p class="text-sm font-semibold text-text-primary truncate">{item.title}</p>
-                <p class="text-xs text-text-body truncate">{item.location}</p>
               </div>
             </a>
         ))}

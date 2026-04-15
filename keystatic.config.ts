@@ -203,6 +203,11 @@ export default config({
           name: { label: "Slug" },
         }),
         title: fields.text({ label: "Title" }),
+        show_full_page: fields.checkbox({
+          label: "Show as full page",
+          description: "Enable for realizacje entries that should appear on the full realizacje page.",
+          defaultValue: true,
+        }),
         short_description: fields.text({
           label: "Short description",
           multiline: true,
@@ -234,7 +239,8 @@ export default config({
           }
         ),
         location: fields.text({ label: "Location" }),
-        gps_location: fields.text({ label: "GPS location" }),
+        gps_latitude: fields.text({ label: "GPS latitude" }),
+        gps_longitude: fields.text({ label: "GPS longitude" }),
         status: fields.select({
           label: "Status",
           options: [

@@ -1,99 +1,171 @@
 ---
-import { getCollection } from 'astro:content';
-import { Image } from 'astro:assets';
-import { resolveImage } from '../lib/resolve-image';
+import { getCollection } from "astro:content";
+import { getImage } from "astro:assets";
+import { resolveImage } from "../lib/resolve-image";
 
-const realizacje = await getCollection('realizacje');
+const realizacje = await getCollection("realizacje");
 
 const projects = await Promise.all(
-  [...realizacje]
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 4)
-    .map(async (item) => ({
-      slug: item.data.slug,
-      title: item.data.title,
-      location: item.data.location,
-      shortDescription: item.data.short_description,
-      imagePath: item.data.image,
-      imageMeta: await resolveImage(item.data.image),
-      status: item.data.status,
-    }))
+    [...realizacje].map(async (item) => {
+      const imageMeta = await resolveImage(item.data.image);
+      let optimizedSrc = item.data.image;
+
+      // If we got valid image metadata, run it through Astro's optimizer
+      if (imageMeta) {
+        try {
+          const optimized = await getImage({
+            src: imageMeta,
+            width: 640,
+            format: "webp",
+          });
+          optimizedSrc = optimized.src;
+        } catch {
+          // fallback to raw path
+        }
+      }
+
+      return {
+        slug: item.data.slug,
+        title: item.data.title,
+        showFullPage: item.data.show_full_page,
+        latitude: item.data.gps_latitude,
+        longitude: item.data.gps_longitude,
+        shortDescription: item.data.short_description,
+        image: optimizedSrc,
+        status: item.data.status,
+      };
+    })
 );
+console.log(projects);
 ---
+
 <section class="not-prose py-16 lg:py-24" id="realizacje">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Section header -->
-    <div class="text-center mb-16">
-      <p class="uppercase tracking-wider text-sm text-text-inactive mb-4">
-        NASZE REALIZACJE
-      </p>
-      <h2 class="text-3xl lg:text-4xl font-bold mb-4 text-text-primary">
-        Portfolio projektów
-      </h2>
-      <p class="text-lg text-text-body max-w-2xl mx-auto">
-        Zobacz przykłady naszych realizacji i przekonaj się o jakości wykonania
-      </p>
-    </div>
+  <!-- Section header -->
+  <div class="text-center mb-16">
+    <p class="uppercase tracking-wider text-sm text-text-inactive mb-4">
+      NASZE REALIZACJE
+    </p>
+    <h2 class="text-3xl lg:text-4xl font-bold mb-4 text-text-primary">
+      Portfolio projektów
+    </h2>
+    <p class="text-lg text-text-body max-w-2xl mx-auto">
+      Zobacz przykłady naszych realizacji i przekonaj się o jakości wykonania
+    </p>
+  </div>
 
-    <!-- Projects grid -->
-    <div class="grid md:grid-cols-2 gap-6">
-      {projects.map((project) => (
-        <a
-          href={`/realizacje/${project.slug}`}
-          class="group relative bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all cursor-pointer"
-        >
-          <!-- Image -->
-          <div class="relative h-80 overflow-hidden">
-            {project.imageMeta ? (
-              <Image
-                src={project.imageMeta}
-                alt={project.title}
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                widths={[640, 960, 1080]}
-                sizes="(min-width: 768px) 50vw, 100vw"
-                loading="lazy"
-              />
-            ) : (
-              <img
-                src={project.imagePath}
-                alt={project.title}
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                loading="lazy"
-                decoding="async"
-                fetchpriority="low"
-              />
-            )}
-            <!-- Overlay on hover -->
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          </div>
-
-          <!-- Content -->
-          <div class="p-6">
-            <h3 class="text-xl font-bold mb-2 text-text-primary">
-              {project.title}
-            </h3>
-            <p class="text-text-inactive text-sm mb-2">{project.location}</p>
-            <p class="text-text-body">{project.shortDescription}</p>
-          </div>
-
-          <!-- Badge -->
-          <div class="absolute top-4 right-4 bg-card px-3 py-1 rounded-full shadow-lg">
-            <span class="text-xs font-semibold text-brand-forest-green">
-              {project.status}
-            </span>
-          </div>
-        </a>
-      ))}
-    </div>
-
-    <!-- CTA -->
-    <div class="text-center mt-12">
-      <a
-        href="/realizacje"
-        class="inline-block px-8 py-4 rounded-lg font-semibold text-white bg-brand-forest-green transition-all hover:shadow-lg"
-      >
-        Zobacz wszystkie realizacje
-      </a>
+  <div class="relative w-full h-[70vh] lg:h-[80vh]">
+    <div id="map" class="w-full h-full rounded-lg shadow-lg"></div>
+    <div
+        id="map-overlay"
+        class="absolute inset-0 z-[999] flex items-center justify-center
+             rounded-lg bg-black/45 text-white text-lg font-semibold
+             pointer-events-none opacity-0 transition-opacity duration-300"
+    >
+      Użyj Ctrl + scroll, aby przybliżyć mapę
     </div>
   </div>
+
+  <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <script define:vars={{ projects }}>
+    import("https://unpkg.com/leaflet@1.9.4/dist/leaflet-src.esm.js").then(
+        (L) => {
+          const map = L.map("map", {
+            scrollWheelZoom: false,
+            dragging: !L.Browser.mobile,
+          }).setView([53.7536528,21.9673904], 9); // centered on Poland
+
+          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: "&copy; OpenStreetMap",
+          }).addTo(map);
+
+          projects.forEach((project) => {
+            if (!project.latitude || !project.longitude) return;
+
+            const popup = `
+            <div style="min-width:200px;max-width:280px">
+              ${
+                project.image
+                    ? `<img
+                      src="${project.image}"
+                      alt="${project.title}"
+                      loading="lazy"
+                      decoding="async"
+                      style="width:100%;height:140px;object-fit:cover;border-radius:6px;margin-bottom:8px"
+                    />`
+                    : ""
+            }
+              <h3 style="margin:0 0 4px;font-size:1rem;font-weight:600">
+                ${project.title}
+              </h3>
+              <p style="margin:0 0 8px;font-size:0.875rem;color:#4b5563">
+                ${project.shortDescription ?? ""}
+              </p>
+              ${
+                project.showFullPage
+                    ? `<a
+                href="/realizacje/${project.slug}"
+                style="display:inline-block;padding:6px 14px;background:#2563eb;color:#fff;border-radius:6px;text-decoration:none;font-size:0.8rem;font-weight:500"
+              >
+                Zobacz więcej →
+              </a>`
+                    : ""
+            }
+            </div>
+          `;
+
+            L.marker([project.latitude, project.longitude])
+                .addTo(map)
+                .bindPopup(popup);
+          });
+
+          // --- Ctrl + scroll overlay ---
+          const overlay = document.getElementById("map-overlay");
+          const mapEl = document.getElementById("map");
+          let hideTimeout;
+
+          function showOverlay() {
+            overlay.classList.add("opacity-100");
+            overlay.classList.remove("opacity-0");
+            clearTimeout(hideTimeout);
+            hideTimeout = setTimeout(() => {
+              overlay.classList.remove("opacity-100");
+              overlay.classList.add("opacity-0");
+            }, 1500);
+          }
+
+          mapEl.addEventListener(
+              "wheel",
+              (e) => {
+                if (e.ctrlKey || e.metaKey) {
+                  e.preventDefault();
+                  map.scrollWheelZoom.enable();
+                  setTimeout(() => map.scrollWheelZoom.disable(), 400);
+                } else {
+                  showOverlay();
+                }
+              },
+              { passive: false }
+          );
+
+          // --- Mobile: two-finger drag ---
+          if (L.Browser.mobile) {
+            overlay.textContent =
+                "Użyj dwóch palców, aby przesunąć mapę";
+
+            map.on("touchstart", (e) => {
+              if (e.originalEvent.touches.length === 1) {
+                map.dragging.disable();
+                showOverlay();
+              } else {
+                map.dragging.enable();
+              }
+            });
+          }
+        }
+    );
+  </script>
 </section>
