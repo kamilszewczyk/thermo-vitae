@@ -233,8 +233,36 @@
         @apply mt-16 mb-6;
     }
 
+    .mdoc-prose > article > h3 {
+        @apply mt-10 mb-4;
+    }
+
     .mdoc-prose > article > h2:first-child {
         @apply mt-0;
+    }
+
+    .mdoc-prose > article > :where(ul, ol) {
+        @apply my-6 pl-6;
+    }
+
+    .mdoc-prose > article > ul {
+        @apply list-disc;
+    }
+
+    .mdoc-prose > article > ol {
+        @apply list-decimal;
+    }
+
+    .mdoc-prose > article > :where(ul, ol) > li {
+        @apply pl-1;
+    }
+
+    .mdoc-prose > article > :where(ul, ol) > li + li {
+        @apply mt-2;
+    }
+
+    .mdoc-prose > article > :where(ul, ol) > li::marker {
+        @apply text-text-primary;
     }
 
     /* Keep callout-like custom blocks aligned with prose width, but keep full section blocks full-bleed. */

@@ -168,16 +168,22 @@ export default config({
   collections: {
     posts: collection({
       label: "Pages",
-      slugField: "title",
+      slugField: "internalName",
       path: "src/content/pages/*",
       format: { contentField: "content" },
       schema: {
+        internalName: fields.text({
+          label: "Internal file name (used for file name)",
+          validation: { isRequired: true },
+        }),
         title: fields.text({
-          label: "Internal title (used for file name)",
+          label: "Page title",
+          validation: { isRequired: true },
         }),
         slug: fields.text({
           label: "Slug / path",
           description: "Public URL path, e.g. uslugi/pompy-ciepla",
+          validation: { isRequired: true },
         }),
         content: fields.markdoc({
           label: "Content",
