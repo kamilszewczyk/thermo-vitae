@@ -8,6 +8,8 @@ links:
         href: /uslugi/fotowoltaika
       - label: Rekuperacja
         href: /uslugi/rekuperacja
+      - label: Klimatyzacja
+        href: /uslugi/klimatyzacja
   - label: Jak działamy
     href: /jak-dzialamy
     children: []
