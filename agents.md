@@ -142,7 +142,6 @@ You may mention relevant brands such as:
 - Thermia
 - Qvantum
 - Panasonic
-- Viessmann
 - Rotenso
 - Alpha Innotec
 
