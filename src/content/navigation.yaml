@@ -22,6 +22,5 @@ links:
     href: /#kontakt
     children: []
   - label: Dofinansowania
-    href: dofinansowania
-    children:
-      - label: dofinansowania
+    href: /dofinansowania
+    children: []
