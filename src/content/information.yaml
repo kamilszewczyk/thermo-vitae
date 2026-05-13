@@ -1,4 +1,4 @@
-phone: +48 501 437 550
+phone: +48 500 158 577
 address: |-
   Park Naukowo-Technologiczny
   ul. Podmiejska 5 lok. 110
@@ -7,7 +7,7 @@ email: biuro@thermo-vitae.eu
 opening_hours: 'Poniedziałek - Piątek: 8:00 - 15:00'
 social:
   - label: Facebook
-    href: facebook.com
+    href: https://www.facebook.com/thermovitae/?locale=pl_PL
     icon: facebook
   - label: LinkedIn
     href: linkedin.com
