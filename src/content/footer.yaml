@@ -17,8 +17,8 @@ second_column:
 third_column:
   title: Firma
   links:
-    - label: Realizacje
-      href: '#'
+    - label: Mapa realizacji
+      href: /mapa-realizacji
 bottom_links:
   - label: Polityka prywatności
     href: '#'
