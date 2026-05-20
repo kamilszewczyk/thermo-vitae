@@ -21,7 +21,7 @@ const spanInfo = [
 
 {kind === "table" && (
   <div
-    class="mdoc-grid-table my-8 overflow-hidden rounded-xl border border-border bg-card text-text-body"
+    class="mdoc-grid-table my-8 overflow-hidden bg-card text-text-body"
     role="table"
   >
     <slot />
@@ -35,7 +35,7 @@ const spanInfo = [
 )}
 
 {kind === "tr" && (
-  <div class="grid grid-flow-col auto-cols-fr border-b border-border last:border-b-0" role="row">
+  <div class="grid grid-cols-1 items-stretch md:grid-flow-col md:auto-cols-fr" role="row">
     <slot />
   </div>
 )}
@@ -43,7 +43,7 @@ const spanInfo = [
 {kind === "th" && (
   <div
     class:list={[
-      "bg-background-gray px-4 py-3 text-sm font-semibold text-text-primary",
+      "h-full bg-background-gray px-4 py-3 text-sm font-semibold text-text-primary",
       alignClass,
     ]}
     role="columnheader"
@@ -56,7 +56,7 @@ const spanInfo = [
 {kind === "td" && (
   <div
     class:list={[
-      "px-4 py-3 text-sm text-text-body",
+      "h-full px-4 py-3 text-sm text-text-body",
       alignClass,
     ]}
     role="cell"

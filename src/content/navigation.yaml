@@ -1,6 +1,5 @@
 links:
   - label: Usługi
-    href: /uslugi
     children:
       - label: Pompy ciepła
         href: /uslugi/pompy-ciepla
@@ -21,7 +20,7 @@ links:
     href: /realizacje
     children: []
   - label: Kontakt
-    href: /kontakt
+    href: /#kontakt
     children: []
   - label: Dofinansowania
     href: /dofinansowania
