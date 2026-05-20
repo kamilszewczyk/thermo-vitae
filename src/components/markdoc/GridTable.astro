@@ -1,0 +1,68 @@
+---
+interface Props {
+  kind?: "table" | "thead" | "tbody" | "tr" | "th" | "td";
+  align?: "left" | "center" | "right";
+  colspan?: number;
+  rowspan?: number;
+}
+
+const { kind = "table", align = "left", colspan, rowspan } = Astro.props as Props;
+
+const alignClass =
+  align === "center" ? "text-center" : align === "right" ? "text-right" : "text-left";
+
+const spanInfo = [
+  colspan && colspan > 1 ? `colspan ${colspan}` : null,
+  rowspan && rowspan > 1 ? `rowspan ${rowspan}` : null,
+]
+  .filter(Boolean)
+  .join(", ");
+---
+
+{kind === "table" && (
+  <div
+    class="mdoc-grid-table my-8 overflow-hidden rounded-xl border border-border bg-card text-text-body"
+    role="table"
+  >
+    <slot />
+  </div>
+)}
+
+{(kind === "thead" || kind === "tbody") && (
+  <div class="contents" role="rowgroup">
+    <slot />
+  </div>
+)}
+
+{kind === "tr" && (
+  <div class="grid grid-flow-col auto-cols-fr border-b border-border last:border-b-0" role="row">
+    <slot />
+  </div>
+)}
+
+{kind === "th" && (
+  <div
+    class:list={[
+      "bg-background-gray px-4 py-3 text-sm font-semibold text-text-primary",
+      alignClass,
+    ]}
+    role="columnheader"
+    aria-label={spanInfo || undefined}
+  >
+    <slot />
+  </div>
+)}
+
+{kind === "td" && (
+  <div
+    class:list={[
+      "px-4 py-3 text-sm text-text-body",
+      alignClass,
+    ]}
+    role="cell"
+    aria-label={spanInfo || undefined}
+  >
+    <slot />
+  </div>
+)}
+

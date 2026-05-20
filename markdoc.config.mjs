@@ -10,6 +10,48 @@ export default defineMarkdocConfig({
                 title: { type: String },
             },
         },
+        table: {
+            render: component('./src/components/markdoc/GridTable.astro'),
+            attributes: {
+                kind: { type: String, default: 'table' },
+            },
+        },
+        thead: {
+            render: component('./src/components/markdoc/GridTable.astro'),
+            attributes: {
+                kind: { type: String, default: 'thead' },
+            },
+        },
+        tbody: {
+            render: component('./src/components/markdoc/GridTable.astro'),
+            attributes: {
+                kind: { type: String, default: 'tbody' },
+            },
+        },
+        tr: {
+            render: component('./src/components/markdoc/GridTable.astro'),
+            attributes: {
+                kind: { type: String, default: 'tr' },
+            },
+        },
+        th: {
+            render: component('./src/components/markdoc/GridTable.astro'),
+            attributes: {
+                kind: { type: String, default: 'th' },
+                align: { type: String },
+                colspan: { type: Number },
+                rowspan: { type: Number },
+            },
+        },
+        td: {
+            render: component('./src/components/markdoc/GridTable.astro'),
+            attributes: {
+                kind: { type: String, default: 'td' },
+                align: { type: String },
+                colspan: { type: Number },
+                rowspan: { type: Number },
+            },
+        },
     },
     tags: {
         Hero: {
