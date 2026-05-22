@@ -255,7 +255,7 @@ export default config({
           ],
           defaultValue: "Zrealizowano",
         }),
-        category: fields.select({
+        category: fields.multiselect({
           label: "Category",
           options: [
             { label: "Pompy ciepła", value: "Pompy ciepła" },
@@ -265,7 +265,7 @@ export default config({
             { label: "Instalacje wewnętrzne", value: "Instalacje wewnętrzne" },
             { label: "Inne", value: "Inne" },
           ],
-          defaultValue: "Pompy ciepła",
+          defaultValue: ["Pompy ciepła"],
         }),
       },
     }),

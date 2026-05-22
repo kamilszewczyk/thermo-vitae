@@ -27,14 +27,18 @@ const realizacje = defineCollection({
         gps_latitude: z.string(),
         gps_longitude: z.string(),
         status: z.enum(["W trakcie", "Zrealizowano"]),
-        category: z.enum([
-            "Pompy ciepła",
-            "Fotowoltaika",
-            "Chłodzenie",
-            "Rekuperacja",
-            "Instalacje wewnętrzne",
-            "Inne",
-        ]),
+        category: z
+            .array(
+                z.enum([
+                    "Pompy ciepła",
+                    "Fotowoltaika",
+                    "Chłodzenie",
+                    "Rekuperacja",
+                    "Instalacje wewnętrzne",
+                    "Inne",
+                ])
+            )
+            .default(["Pompy ciepła"]),
     }),
 });
 

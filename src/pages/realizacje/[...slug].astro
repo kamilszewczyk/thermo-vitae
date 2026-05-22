@@ -55,7 +55,7 @@ const project = {
       caption: `Zdjecie realizacji ${index + 1}`,
     })),
   specs: [
-    { label: 'Kategoria', value: projectEntry.data.category },
+    { label: 'Kategoria', value: projectEntry.data.category.join(', ') },
     { label: 'Status', value: projectEntry.data.status },
     { label: 'Lokalizacja', value: projectEntry.data.location },
   ],
