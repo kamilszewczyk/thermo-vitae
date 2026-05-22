@@ -1,0 +1,107 @@
+---
+import { getCollection } from "astro:content";
+
+const googleReviewsUrl =
+  "https://www.google.com/maps/place/Thermo+Vitae+s.c./@53.8290731,22.3905232,17z/data=!4m8!3m7!1s0x46e1ba2410de0231:0xdf0b82d2c3eb776e!8m2!3d53.82907!4d22.3930981!9m1!1b1!16s%2Fg%2F11bw3c4n_f?entry=ttu&g_ep=EgoyMDI2MDUxMy4wIKXMDSoASAFQAw%3D%3D";
+
+const reviews = (await getCollection("featuredReviews")).map((entry) => ({
+  content: entry.data.content,
+  authorPlace: entry.data.authorPlace,
+  realizacjaUrl: entry.data.realizacjaUrl?.trim() || undefined,
+}));
+---
+
+<div class="not-prose my-8">
+  <div
+    data-featured-review-root
+    data-featured-reviews={encodeURIComponent(JSON.stringify(reviews))}
+    class="rounded-3xl border-2 border-brand-forest-green/15 bg-gradient-to-br from-white via-background-gray to-brand-natural-green/10 p-6 md:p-8 shadow-xl shadow-brand-forest-green/10"
+  >
+    <div class="mb-4 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+      <p class="inline-flex w-fit rounded-full bg-brand-forest-green px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-white">Wyróżniona opinia</p>
+
+      <a
+        href={googleReviewsUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center text-xs font-medium text-text-body underline decoration-brand-forest-green/40 underline-offset-4 hover:text-brand-forest-green md:justify-end"
+      >
+        Więcej opinii w Google Maps
+      </a>
+    </div>
+
+    <div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:gap-4">
+      <p class="shrink-0 text-2xl leading-none tracking-[0.14em] text-brand-forest-green lg:text-3xl lg:leading-[1.2]" aria-label="Ocena 5 na 5">★★★★★</p>
+
+      <div class="min-w-0">
+        <blockquote data-featured-review-content class="text-base font-semibold leading-relaxed text-text-primary md:text-lg">
+          {reviews.length > 0
+            ? reviews[0].content
+            : "Brak wyróżnionych opinii. Wróć później po nową rekomendację."}
+        </blockquote>
+
+        <p data-featured-review-author class="mt-2 text-xs font-medium text-text-body/90">
+          {reviews.length > 0 ? reviews[0].authorPlace : "Thermo Vitae"}
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-6 flex flex-wrap items-center gap-3">
+      <a
+        data-featured-review-link
+        href={reviews.length > 0 ? reviews[0].realizacjaUrl : "#"}
+        class="inline-flex items-center rounded-full border border-brand-forest-green px-4 py-2 text-sm font-semibold text-brand-forest-green hover:bg-brand-forest-green hover:text-white transition-colors"
+        hidden={reviews.length === 0 || !reviews[0].realizacjaUrl}
+      >
+        Zobacz powiązaną realizację
+      </a>
+    </div>
+
+  </div>
+
+  <script is:inline>
+    (() => {
+      const script = document.currentScript;
+      if (!(script instanceof HTMLScriptElement)) return;
+
+      const root = script.previousElementSibling;
+      if (!(root instanceof HTMLElement)) return;
+
+      let reviews = [];
+      try {
+        const encoded = root.dataset.featuredReviews || "%5B%5D";
+        const parsed = JSON.parse(decodeURIComponent(encoded));
+        if (Array.isArray(parsed)) reviews = parsed;
+      } catch {
+        return;
+      }
+
+      if (reviews.length === 0) return;
+
+      const randomReview = reviews[Math.floor(Math.random() * reviews.length)];
+      if (!randomReview) return;
+
+      const contentEl = root.querySelector("[data-featured-review-content]");
+      const authorEl = root.querySelector("[data-featured-review-author]");
+      const realizacjaEl = root.querySelector("[data-featured-review-link]");
+
+      if (contentEl) contentEl.textContent = randomReview.content;
+      if (authorEl) authorEl.textContent = randomReview.authorPlace;
+
+      if (realizacjaEl instanceof HTMLAnchorElement) {
+        if (randomReview.realizacjaUrl) {
+          realizacjaEl.href = randomReview.realizacjaUrl;
+          realizacjaEl.hidden = false;
+        } else {
+          realizacjaEl.hidden = true;
+        }
+      }
+    })();
+  </script>
+</div>
+
+
+
+
+
+

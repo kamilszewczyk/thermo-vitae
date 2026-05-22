@@ -42,6 +42,15 @@ const realizacje = defineCollection({
     }),
 });
 
+const featuredReviews = defineCollection({
+    loader: glob({ pattern: "**/*.yaml", base: "./src/content/featured-reviews" }),
+    schema: z.object({
+        content: z.string(),
+        authorPlace: z.string(),
+        realizacjaUrl: z.string().optional(),
+    }),
+});
+
 const header = defineCollection({
     loader: glob({ pattern: "header.yaml", base: "./src/content" }),
     schema: z.object({
@@ -135,4 +144,4 @@ const information = defineCollection({
     }),
 });
 
-export const collections = { pages, realizacje, information, header, navigation, footer };
+export const collections = { pages, realizacje, featuredReviews, information, header, navigation, footer };

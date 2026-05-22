@@ -107,6 +107,10 @@ export default defineMarkdocConfig({
                 color: { type: String },
             },
         },
+        FeaturedReview: {
+            render: component('./src/components/FeaturedReview.astro'),
+            attributes: {},
+        },
         Portfolio: {
             render: component('./src/components/Portfolio.astro'),
             attributes: {},

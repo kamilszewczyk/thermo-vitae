@@ -199,6 +199,26 @@ export default config({
         }),
       },
     }),
+    featuredReviews: collection({
+      label: "Featured reviews",
+      slugField: "authorPlace",
+      path: "src/content/featured-reviews/*",
+      schema: {
+        content: fields.text({
+          label: "Review content",
+          multiline: true,
+          validation: { isRequired: true },
+        }),
+        authorPlace: fields.text({
+          label: "Author / place",
+          validation: { isRequired: true },
+        }),
+        realizacjaUrl: fields.text({
+          label: "Optional realizacja URL",
+          description: "Example: /realizacje/nazwa-realizacji",
+        }),
+      },
+    }),
     realizacje: collection({
       label: "Realizacje",
       slugField: "slug",

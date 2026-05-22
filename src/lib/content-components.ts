@@ -215,6 +215,11 @@ export const contentComponents = {
         },
     }),
 
+    FeaturedReview: block({
+        label: "Featured review",
+        schema: {},
+    }),
+
     Portfolio: block({
         label: "Portfolio",
         schema: {},
