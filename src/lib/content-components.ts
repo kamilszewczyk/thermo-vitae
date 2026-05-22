@@ -222,6 +222,22 @@ export const contentComponents = {
 
     Portfolio: block({
         label: "Portfolio",
-        schema: {},
+        schema: {
+            categories: fields.multiselect({
+                label: "Categories filter (optional)",
+                options: [
+                    { label: "Pompy ciepła", value: "Pompy ciepła" },
+                    { label: "Fotowoltaika", value: "Fotowoltaika" },
+                    { label: "Chłodzenie", value: "Chłodzenie" },
+                    { label: "Rekuperacja", value: "Rekuperacja" },
+                    {
+                        label: "Instalacje wewnętrzne",
+                        value: "Instalacje wewnętrzne",
+                    },
+                    { label: "Inne", value: "Inne" },
+                ],
+                defaultValue: [],
+            }),
+        },
     }),
 };

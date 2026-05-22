@@ -113,7 +113,10 @@ export default defineMarkdocConfig({
         },
         Portfolio: {
             render: component('./src/components/Portfolio.astro'),
-            attributes: {},
+            attributes: {
+                categories: { type: Array },
+                category: { type: String },
+            },
         }
     },
 });

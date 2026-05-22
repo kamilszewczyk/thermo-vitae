@@ -3,6 +3,20 @@ import { getCollection } from "astro:content";
 import { getImage } from "astro:assets";
 import { resolveImage } from "../lib/resolve-image";
 
+interface Props {
+  categories?: string[];
+  category?: string;
+}
+
+const { categories = [], category } = Astro.props as Props;
+const selectedCategories = [
+  ...new Set(
+    [...categories, ...(category ? [category] : [])]
+      .map((value) => value?.trim())
+      .filter((value): value is string => Boolean(value))
+  ),
+];
+
 const realizacje = await getCollection("realizacje");
 
 const projects = await Promise.all(
@@ -33,9 +47,12 @@ const projects = await Promise.all(
         shortDescription: item.data.short_description,
         image: optimizedSrc,
         status: item.data.status,
+        categories: item.data.category,
       };
     })
 );
+
+const scriptVars = { projects, selectedCategories };
 ---
 
 <section class="not-prose py-16 lg:py-24" id="realizacje">
@@ -69,9 +86,14 @@ const projects = await Promise.all(
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   />
 
-  <script define:vars={{ projects }}>
+  <script define:vars={scriptVars}>
     import("https://unpkg.com/leaflet@1.9.4/dist/leaflet-src.esm.js").then(
         (L) => {
+          const normalizedFilters = selectedCategories.map((value) =>
+              value.toLowerCase().trim()
+          );
+          const hasCategoryFilter = normalizedFilters.length > 0;
+
           const map = L.map("map", {
             scrollWheelZoom: false,
             dragging: !L.Browser.mobile,
@@ -83,6 +105,14 @@ const projects = await Promise.all(
 
           projects.forEach((project) => {
             if (!project.latitude || !project.longitude) return;
+            if (
+                hasCategoryFilter &&
+                !project.categories?.some((category) =>
+                    normalizedFilters.includes(category.toLowerCase().trim())
+                )
+            ) {
+              return;
+            }
 
             const popup = `
             <div style="min-width:200px;max-width:280px">
