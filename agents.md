@@ -111,8 +111,26 @@ Colors:
 - `dark-green`
 - `light-green`
 
+### FeaturedReview
+Optional trust block with one randomized highlighted review.
+
+Use when:
+- a page benefits from social proof (service pages, local pages, comparison pages)
+- you want to break longer explanatory content with a credibility element
+
+Notes:
+- no fields required
+- place in the middle or near the end of page content (not before Hero)
+
 ### Portfolio
 Use near the end on service pages.
+
+Fields:
+- `categories` (optional multi-select filter)
+
+Filtering rule:
+- when `categories` is set, map shows only realizations from selected categories
+- when `categories` is empty, map shows all realizations
 
 ## Default page structure
 Use this unless the prompt suggests a better structure:
@@ -124,10 +142,11 @@ Use this unless the prompt suggests a better structure:
 5. Callout with key principle
 6. Features for variants / use cases / service scope
 7. Markdown H2 sections answering practical questions
-8. Partners if relevant
-9. Portfolio if relevant
-10. final Callout
-11. final H2 + contact link
+8. FeaturedReview if relevant
+9. Partners if relevant
+10. Portfolio if relevant (use `categories` when page is service-specific)
+11. final Callout
+12. final H2 + contact link
 
 ## Writing rules
 - Keep paragraphs short.

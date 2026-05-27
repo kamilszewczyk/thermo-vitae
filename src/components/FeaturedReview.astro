@@ -6,7 +6,10 @@ const googleReviewsUrl =
 
 const reviews = (await getCollection("featuredReviews")).map((entry) => ({
   content: entry.data.content,
-  authorPlace: entry.data.authorPlace,
+  authorPlace:
+    typeof entry.data.authorPlace === "string"
+      ? entry.data.authorPlace
+      : entry.data.authorPlace.name,
   realizacjaUrl: entry.data.realizacjaUrl?.trim() || undefined,
 }));
 ---

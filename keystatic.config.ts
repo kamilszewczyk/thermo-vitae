@@ -11,6 +11,16 @@ function parseGithubRepo(value: string | undefined) {
   return { owner, name };
 }
 
+function toAsciiSlug(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .replace(/-{2,}/g, "-");
+}
+
 const githubRepo = parseGithubRepo(import.meta.env.PUBLIC_KEYSTATIC_GITHUB_REPO);
 const useGithubStorage = import.meta.env.PUBLIC_KEYSTATIC_STORAGE_KIND === 'github' && Boolean(githubRepo);
 
@@ -209,9 +219,16 @@ export default config({
           multiline: true,
           validation: { isRequired: true },
         }),
-        authorPlace: fields.text({
-          label: "Author / place",
-          validation: { isRequired: true },
+        authorPlace: fields.slug({
+          name: {
+            label: "Author / place",
+            validation: { isRequired: true },
+          },
+          slug: {
+            label: "File name",
+            generate: toAsciiSlug,
+            description: "Auto-generated safe file name (lowercase, hyphenated).",
+          },
         }),
         realizacjaUrl: fields.text({
           label: "Optional realizacja URL",

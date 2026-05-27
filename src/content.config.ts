@@ -46,7 +46,13 @@ const featuredReviews = defineCollection({
     loader: glob({ pattern: "**/*.yaml", base: "./src/content/featured-reviews" }),
     schema: z.object({
         content: z.string(),
-        authorPlace: z.string(),
+        authorPlace: z.union([
+            z.string(),
+            z.object({
+                name: z.string(),
+                slug: z.string(),
+            }),
+        ]),
         realizacjaUrl: z.string().optional(),
     }),
 });
