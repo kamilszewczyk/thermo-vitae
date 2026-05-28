@@ -5,7 +5,6 @@ function normalizeBranchName(value: string | undefined) {
   return value.replace(/^refs\/heads\//, '').trim();
 }
 
-const protectedBranch = normalizeBranchName(process.env.KEYSTATIC_PROTECTED_BRANCH ?? 'master');
 const currentBranch = normalizeBranchName(
   process.env.KEYSTATIC_CURRENT_BRANCH
     ?? process.env.VERCEL_GIT_COMMIT_REF
@@ -13,33 +12,50 @@ const currentBranch = normalizeBranchName(
     ?? process.env.GIT_BRANCH
 );
 const warningEnabled = (process.env.KEYSTATIC_MASTER_WARNING ?? 'true').toLowerCase() !== 'false';
-const shouldWarnOnSave = warningEnabled && protectedBranch.length > 0 && currentBranch === protectedBranch;
+const shouldWarnOnSave = warningEnabled && currentBranch === 'master';
 
 const warningBannerText = 'Uwaga: edytujesz galaz master. Zapis zmian wplynie bezposrednio na strone.';
 const warningDialogText = 'Uwaga! Zapisujesz zmiany na galezi master. To wplynie bezposrednio na strone. Czy na pewno chcesz kontynuowac?';
 
 const warningInjection = `
-<script id="keystatic-master-branch-warning" data-protected-branch="${protectedBranch}" data-current-branch="${currentBranch}">
+<script id="keystatic-master-branch-warning" data-current-branch="${currentBranch}">
 (() => {
   if (window.__keystaticMasterWarningInit) return;
   window.__keystaticMasterWarningInit = true;
 
-  const banner = document.createElement('div');
-  banner.id = 'keystatic-master-warning-banner';
-  banner.textContent = ${JSON.stringify(warningBannerText)};
-  banner.style.position = 'fixed';
-  banner.style.top = '0';
-  banner.style.left = '0';
-  banner.style.right = '0';
-  banner.style.zIndex = '999999';
-  banner.style.background = '#b91c1c';
-  banner.style.color = '#ffffff';
-  banner.style.fontFamily = 'system-ui, -apple-system, Segoe UI, Roboto, sans-serif';
-  banner.style.fontSize = '14px';
-  banner.style.fontWeight = '600';
-  banner.style.padding = '10px 14px';
-  banner.style.textAlign = 'center';
-  document.body.appendChild(banner);
+  const renderSidebarBanner = () => {
+    const sidebar = document.querySelector('aside, nav[aria-label*="collection" i], [data-sidebar], [class*="sidebar" i]');
+    if (!sidebar) return false;
+
+    if (sidebar.querySelector('#keystatic-master-warning-banner')) return true;
+
+    const banner = document.createElement('div');
+    banner.id = 'keystatic-master-warning-banner';
+    banner.textContent = ${JSON.stringify(warningBannerText)};
+    banner.style.background = '#b91c1c';
+    banner.style.color = '#ffffff';
+    banner.style.fontFamily = 'system-ui, -apple-system, Segoe UI, Roboto, sans-serif';
+    banner.style.fontSize = '13px';
+    banner.style.fontWeight = '600';
+    banner.style.padding = '10px 12px';
+    banner.style.margin = '8px';
+    banner.style.borderRadius = '8px';
+    banner.style.lineHeight = '1.3';
+
+    sidebar.prepend(banner);
+    return true;
+  };
+
+  if (!renderSidebarBanner()) {
+    const observer = new MutationObserver(() => {
+      if (renderSidebarBanner()) {
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+    setTimeout(() => observer.disconnect(), 10000);
+  }
 
   const keywords = ['save', 'publish', 'zapisz', 'opublikuj'];
   const isSaveAction = (element) => {
