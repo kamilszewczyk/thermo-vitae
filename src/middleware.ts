@@ -24,7 +24,9 @@ const warningInjection = `
   window.__keystaticMasterWarningInit = true;
 
   const renderSidebarBanner = () => {
-    const sidebar = document.querySelector('aside, nav[aria-label*="collection" i], [data-sidebar], [class*="sidebar" i]');
+    const sidebar = document.querySelector(
+      '[data-split-pane="primary"], div[id^="primary-pane-"], aside, nav[aria-label*="collection" i], [data-sidebar], [class*="sidebar" i]'
+    );
     if (!sidebar) return false;
 
     if (sidebar.querySelector('#keystatic-master-warning-banner')) return true;
@@ -54,7 +56,7 @@ const warningInjection = `
     });
 
     observer.observe(document.body, { childList: true, subtree: true });
-    setTimeout(() => observer.disconnect(), 10000);
+    setTimeout(() => observer.disconnect(), 60000);
   }
 
   const keywords = ['save', 'publish', 'zapisz', 'opublikuj'];
