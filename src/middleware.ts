@@ -1,23 +1,16 @@
 import type { MiddlewareHandler } from 'astro';
 
-function normalizeBranchName(value: string | undefined) {
-  if (!value) return '';
-  return value.replace(/^refs\/heads\//, '').trim();
-}
-
-const currentBranch = normalizeBranchName(
-  process.env.KEYSTATIC_CURRENT_BRANCH
-    ?? process.env.VERCEL_GIT_COMMIT_REF
-    ?? process.env.GITHUB_REF_NAME
-    ?? process.env.GIT_BRANCH
-);
 const warningEnabled = (process.env.KEYSTATIC_MASTER_WARNING ?? 'true').toLowerCase() !== 'false';
-const shouldWarnOnSave = warningEnabled && currentBranch === 'master';
+
+function getKeystaticBranchFromPath(pathname: string) {
+  const match = pathname.match(/^\/keystatic\/branch\/([^/]+)/);
+  return match ? decodeURIComponent(match[1]).trim() : '';
+}
 
 const warningBannerText = 'Uwaga: edytujesz galaz master. Zapis zmian wplynie bezposrednio na strone.';
 const warningDialogText = 'Uwaga! Zapisujesz zmiany na galezi master. To wplynie bezposrednio na strone. Czy na pewno chcesz kontynuowac?';
 
-const warningInjection = `
+const getWarningInjection = (currentBranch: string) => `
 <script id="keystatic-master-branch-warning" data-current-branch="${currentBranch}">
 (() => {
   if (window.__keystaticMasterWarningInit) return;
@@ -91,7 +84,13 @@ const warningInjection = `
 
 export const onRequest: MiddlewareHandler = async (context, next) => {
   const pathname = context.url.pathname;
-  if (!shouldWarnOnSave || !pathname.startsWith('/keystatic')) {
+  if (!warningEnabled || !pathname.startsWith('/keystatic')) {
+    return next();
+  }
+
+  const currentBranch = getKeystaticBranchFromPath(pathname);
+  const shouldWarnOnSave = currentBranch === 'master';
+  if (!shouldWarnOnSave) {
     return next();
   }
 
@@ -107,8 +106,8 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
   }
 
   const patchedHtml = html.includes('</body>')
-    ? html.replace('</body>', `${warningInjection}</body>`)
-    : `${html}${warningInjection}`;
+    ? html.replace('</body>', `${getWarningInjection(currentBranch)}</body>`)
+    : `${html}${getWarningInjection(currentBranch)}`;
 
   const headers = new Headers(response.headers);
   headers.delete('content-length');
