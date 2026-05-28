@@ -43,13 +43,30 @@ jobs:
     name: FTP deploy (master push)
     runs-on: ubuntu-latest
     needs: static-build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master' && secrets.FTP_SERVER != '' && secrets.FTP_USERNAME != '' && secrets.FTP_PASSWORD != '' && secrets.FTP_REMOTE_DIR != ''
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
       - name: Download static artifact
         uses: actions/download-artifact@v4
         with:
           name: production-dist
           path: dist
+
+      - name: Validate FTP secrets
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_REMOTE_DIR: ${{ secrets.FTP_REMOTE_DIR }}
+        run: |
+          missing=""
+          [ -z "$FTP_SERVER" ] && missing="$missing FTP_SERVER"
+          [ -z "$FTP_USERNAME" ] && missing="$missing FTP_USERNAME"
+          [ -z "$FTP_PASSWORD" ] && missing="$missing FTP_PASSWORD"
+          [ -z "$FTP_REMOTE_DIR" ] && missing="$missing FTP_REMOTE_DIR"
+          if [ -n "$missing" ]; then
+            echo "::error::Missing required FTP secrets:$missing"
+            exit 1
+          fi
 
       - name: Upload dist/ via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
