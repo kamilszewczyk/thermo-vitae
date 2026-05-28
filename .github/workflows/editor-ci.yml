@@ -1,9 +1,8 @@
 name: Editor CI
 
 on:
-  pull_request:
   push:
-    branches:
+    branches-ignore:
       - master
   workflow_dispatch:
 

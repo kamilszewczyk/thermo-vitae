@@ -152,16 +152,29 @@ npm run build:prod
 Two CI workflows are included:
 
 - `Editor CI` (`.github/workflows/editor-ci.yml`)
+  - Runs automatically on pushes to non-`master` branches and on manual dispatch
   - Runs `astro check` in editor mode
   - Runs `build:editor` (Vercel adapter path)
-  - Uses `PUBLIC_KEYSTATIC_STORAGE_KIND=local` in CI to avoid requiring GitHub OAuth secrets
   - Uploads `.vercel/output` as `editor-vercel-output` artifact
 - `Production Static CI` (`.github/workflows/production-static-ci.yml`)
   - Runs `astro check` in production mode
   - Runs `build:prod` (static output for PHP server)
   - Uploads `dist` as `production-dist` artifact
+  - On pushes to `master`, downloads that artifact and deploys it over FTP
 
-Both workflows run on pull requests, pushes to `main`, and manual dispatch.
+`Production Static CI` runs on pull requests, pushes to `master`, and manual dispatch.
+
+Required GitHub secrets for FTP deploy:
+
+- `FTP_SERVER`
+- `FTP_USERNAME`
+- `FTP_PASSWORD`
+- `FTP_REMOTE_DIR`
+
+Optional GitHub secrets:
+
+- `FTP_PORT` (default `21`)
+- `FTP_PROTOCOL` (default `ftp`, can be `ftps`)
 
 ### Finish setup checklist (Vercel editor)
 
