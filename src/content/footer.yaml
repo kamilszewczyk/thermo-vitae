@@ -8,18 +8,19 @@ second_column:
   title: Usługi
   links:
     - label: Pompy ciepła
-      href: '#'
+      href: /Pompy ciepła
     - label: Fotowoltaika
-      href: '#'
+      href: /Fotowoltaika
     - label: Rekuperacja
-      href: '#'
+      href: /Rekuperacja
     - label: Instalacje grzewcze
-      href: '#'
+      href: /Instalacje grzewcze
     - label: Klimatyzacja
-      href: '#'
+      href: /Klimatyzacja
     - label: Chłodzenia budynku
-      href: '#'
+      href: /Chłodzenie budynku
     - label: Serwis i konserwacja
+      href: /Kontakt
 third_column:
   title: Firma
   links:
