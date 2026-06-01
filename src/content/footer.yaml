@@ -8,28 +8,28 @@ second_column:
   title: Usługi
   links:
     - label: Pompy ciepła
-      href: /Pompy ciepła
+      href: /pompy ciepła
     - label: Fotowoltaika
-      href: /Fotowoltaika
+      href: /fotowoltaika
     - label: Rekuperacja
-      href: /Rekuperacja
+      href: /rekuperacja
     - label: Instalacje grzewcze
-      href: /Instalacje grzewcze
+      href: /instalacje-grzewcze
     - label: Klimatyzacja
-      href: /Klimatyzacja
+      href: /klimatyzacja
     - label: Chłodzenia budynku
-      href: /Chłodzenie budynku
+      href: /chłodzenie budynku
     - label: Serwis i konserwacja
-      href: /Kontakt
+      href: /kontakt
 third_column:
   title: Firma
   links:
     - label: Mapa realizacji
       href: /mapa-realizacji
     - label: Jak działamy
-      href: /Jak działamy
+      href: /jak-działamy
     - label: Dofinansowania
-      href: /Dofinansowania
+      href: /dofinansowania
 bottom_links:
   - label: Polityka prywatności
     href: '#'
