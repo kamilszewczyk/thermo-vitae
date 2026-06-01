@@ -1,19 +1,25 @@
 logo: /src/assets/logo.png
 logoAlt: Logo
 footer_copy: >-
-  Profesjonalne systemy grzewcze oparte na odnawialnych źródłach energii. 15 lat
-  doświadczenia w branży.
+  Nowoczesne instalacje HVAC i OZE dla domu oraz firmy. 15 lat doświadczenia w
+  branży. Pomagamy stworzyć komfortowy, energooszczędny i przyszłościowy
+  budynek.
 second_column:
   title: Usługi
   links:
-    - label: Pompy ciepła powietrze-woda
+    - label: Pompy ciepła
       href: '#'
-    - label: Pompy ciepła gruntowe
+    - label: Fotowoltaika
       href: '#'
-    - label: Systemy hybrydowe
+    - label: Rekuperacja
+      href: '#'
+    - label: Instalacje grzewcze
+      href: '#'
+    - label: Klimatyzacja
+      href: '#'
+    - label: Chłodzenia budynku
       href: '#'
     - label: Serwis i konserwacja
-      href: '#'
 third_column:
   title: Firma
   links:
