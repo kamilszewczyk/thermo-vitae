@@ -26,6 +26,10 @@ third_column:
   links:
     - label: Mapa realizacji
       href: /mapa-realizacji
+    - label: Jak działamy
+      href: /Jak działamy
+    - label: Dofinansowania
+      href: /Dofinansowania
 bottom_links:
   - label: Polityka prywatności
     href: '#'
