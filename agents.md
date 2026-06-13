@@ -132,6 +132,17 @@ Filtering rule:
 - when `categories` is set, map shows only realizations from selected categories
 - when `categories` is empty, map shows all realizations
 
+### YouTube
+Embeds a single responsive YouTube video (privacy-friendly, lazy-loaded).
+
+Fields:
+- `url` — paste any YouTube link (`watch?v=...`, `youtu.be/...`, `/embed/...`, `/shorts/...`); a bare 11-char video ID also works
+- `title` — accessible title for the video iframe
+
+Notes:
+- renders a 16:9 player; nothing is shown if the URL has no recognizable video ID
+- use sparingly, e.g. a project walkthrough on a realizacja or a short explainer on a service page
+
 ## Default page structure
 Use this unless the prompt suggests a better structure:
 

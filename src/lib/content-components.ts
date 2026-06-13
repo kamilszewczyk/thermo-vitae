@@ -240,4 +240,18 @@ export const contentComponents = {
             }),
         },
     }),
+
+    YouTube: block({
+        label: "YouTube",
+        schema: {
+            url: fields.text({
+                label: "YouTube URL",
+                description:
+                    "Paste any YouTube link, e.g. https://www.youtube.com/watch?v=... or https://youtu.be/...",
+            }),
+            title: fields.text({
+                label: "Title (for accessibility)",
+            }),
+        },
+    }),
 };
