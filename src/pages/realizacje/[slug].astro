@@ -9,7 +9,6 @@ export async function getStaticPaths() {
   const projects = await getCollection('realizacje');
 
   return projects.map((project) => ({
-    // Astro rest params must be a string (e.g. "a/b"), not an array.
     params: { slug: project.data.slug },
     props: { project },
   }));
@@ -23,15 +22,14 @@ const { project: staticProjectEntry } = Astro.props as {
   project?: CollectionEntry<'realizacje'>;
 };
 
-const slugParam = Astro.params.slug;
-const slug = Array.isArray(slugParam) ? slugParam.join('/') : slugParam;
+const slug = Astro.params.slug;
 
 // In server mode, Astro.props from getStaticPaths can be unavailable.
 const projectEntry =
   staticProjectEntry ?? allProjects.find((item) => item.data.slug === slug);
 
 if (!projectEntry) {
-  throw Astro.redirect('/realizacje');
+  return Astro.redirect('/realizacje');
 }
 
 const staticDetails = {
