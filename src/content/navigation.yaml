@@ -14,7 +14,7 @@ links:
       - label: Chłodzenie budynku
         href: /uslugi/chlodzenie
       - label: Inteligentne sterowanie
-        href: usługi/inteligentne-sterowanie
+        href: /uslugi/inteligentne-sterowanie
   - label: Jak działamy
     href: /jak-dzialamy
     children: []
