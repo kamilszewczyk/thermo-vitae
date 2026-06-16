@@ -221,7 +221,7 @@ export const contentComponents = {
     }),
 
     Portfolio: block({
-        label: "Portfolio",
+        label: "Mapa realizacji",
         schema: {
             categories: fields.multiselect({
                 label: "Categories filter (optional)",
