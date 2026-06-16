@@ -117,6 +117,13 @@ export default defineMarkdocConfig({
                 categories: { type: Array },
                 category: { type: String },
             },
+        },
+        YouTube: {
+            render: component('./src/components/YouTube.astro'),
+            attributes: {
+                url: { type: String },
+                title: { type: String },
+            },
         }
     },
 });

@@ -1,0 +1,52 @@
+---
+interface Props {
+  url?: string;
+  title?: string;
+}
+
+const { url = "", title = "" } = Astro.props as Props;
+
+// Extract the 11-character YouTube video ID from common URL formats:
+// watch?v=ID, youtu.be/ID, /embed/ID, /shorts/ID — or a bare ID.
+function getVideoId(input: string): string {
+  const value = (input || "").trim();
+  if (!value) return "";
+
+  const patterns = [
+    /[?&]v=([a-zA-Z0-9_-]{11})/,
+    /youtu\.be\/([a-zA-Z0-9_-]{11})/,
+    /\/embed\/([a-zA-Z0-9_-]{11})/,
+    /\/shorts\/([a-zA-Z0-9_-]{11})/,
+  ];
+
+  for (const pattern of patterns) {
+    const match = value.match(pattern);
+    if (match) return match[1];
+  }
+
+  // Fall back to a bare ID if the whole value looks like one.
+  if (/^[a-zA-Z0-9_-]{11}$/.test(value)) return value;
+
+  return "";
+}
+
+const videoId = getVideoId(url);
+const fallbackTitle = title.trim() || "YouTube video";
+---
+
+{
+  videoId && (
+    <div class="not-prose my-6 aspect-video w-full overflow-hidden rounded-xl">
+      <iframe
+        class="h-full w-full"
+        src={`https://www.youtube-nocookie.com/embed/${videoId}`}
+        title={fallbackTitle}
+        loading="lazy"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+      />
+    </div>
+  )
+}

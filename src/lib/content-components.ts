@@ -221,7 +221,7 @@ export const contentComponents = {
     }),
 
     Portfolio: block({
-        label: "Portfolio",
+        label: "Mapa realizacji",
         schema: {
             categories: fields.multiselect({
                 label: "Categories filter (optional)",
@@ -237,6 +237,20 @@ export const contentComponents = {
                     { label: "Inne", value: "Inne" },
                 ],
                 defaultValue: [],
+            }),
+        },
+    }),
+
+    YouTube: block({
+        label: "YouTube",
+        schema: {
+            url: fields.text({
+                label: "YouTube URL",
+                description:
+                    "Paste any YouTube link, e.g. https://www.youtube.com/watch?v=... or https://youtu.be/...",
+            }),
+            title: fields.text({
+                label: "Title (for accessibility)",
             }),
         },
     }),
